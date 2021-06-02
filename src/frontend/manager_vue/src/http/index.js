@@ -1,14 +1,14 @@
 import axios from 'axios'
 
-const http = axios.create({
+const instance = axios.create({
     baseURL:"http://localhost:5000/api",
     timeout: 10*60*1000
 });
 
-http.interceptors.response.use(res=>{
-    return res.data;
+instance.interceptors.response.use(res=>{
+    return res.data
 },err=>{
-    console.log(err);
+    console.log(err)
 })
 
-export default  http;
+export const http = instance

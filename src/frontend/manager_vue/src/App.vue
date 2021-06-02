@@ -2,8 +2,18 @@
   <div id="app" class="layout">
     <Header></Header>
     <Content>
-      <router-view />
+      <Row type="flex" justify="center">
+        <Col span="12">
+          <div class="app-container">
+            <router-view />
+          </div>
+        </Col>
+      </Row>
     </Content>
-    <Footer></Footer>
   </div>
 </template>
+<style lang="less" scoped>
+.app-container{
+  padding-top:30px;
+}
+</style>
