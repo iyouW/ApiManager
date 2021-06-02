@@ -1,4 +1,5 @@
 ﻿using ApiManager.Api.Application.Model.Request.Project;
+using ApiManager.Api.Application.Services.Project;
 using ApiManager.Core.Entities;
 using ApiManager.Core.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -13,21 +14,27 @@ namespace ApiManager.Api.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        private readonly IProjectRepository _repo;
+        private readonly IProjectService _service;
 
-        public ProjectController(IProjectRepository repo)
+        public ProjectController(IProjectService service)
         {
-            _repo = repo;
+            _service = service;
+        }
+
+        [HttpGet]
+        public Task<IEnumerable<Project>> List()
+        {
+            return _service.GetListAsync();
         }
 
         [HttpGet("{id}")]
         public Task<Project> GetById(string id)
         {
-            return _repo.GetById(id);
+            return _service.GetByIdAsync(id);
         }
 
         [HttpPost]
-        public Task<string> Post(AddProjectRequest request)
+        public Task<Project> Post(AddProjectRequest request)
         {
             var proj = new Project
             {
@@ -35,7 +42,7 @@ namespace ApiManager.Api.Controllers
                 Name = request.Name,
                 Description = request.Description
             };
-            return _repo.AddAsync(proj);
+            return _service.AddAsync(proj);
         }
     }
 }

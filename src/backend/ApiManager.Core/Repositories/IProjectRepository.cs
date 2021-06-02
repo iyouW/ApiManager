@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace ApiManager.Core.Repositories
 {
-    public interface IProjectRepository
+    public interface IProjectRepository : IRepositoryBase<Project,string>
     {
-        Task<Project> GetById(string id);
-        Task<string> AddAsync(Project project);
+
     }
 }

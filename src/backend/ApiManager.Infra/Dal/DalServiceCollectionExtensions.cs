@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DapperExtensions.Sql;
+using DapperExtensions.Mapper;
+using System.Reflection;
 
 namespace ApiManager.Infra.Dal
 {
@@ -18,9 +20,8 @@ namespace ApiManager.Infra.Dal
     {
         public static IServiceCollection AddDAL(this IServiceCollection services,IConfigurationSection section)
         {
-            DefaultTypeMap.MatchNamesWithUnderscores = true;
-
-            DapperExtensions.DapperExtensions.SqlDialect = new MySqlDialect();
+            ConfigureDapper();
+            ConfigureDapperExtensions();
 
             services.Configure<DalOptions>(section);
 
@@ -28,6 +29,21 @@ namespace ApiManager.Infra.Dal
             services.TryAddScoped<IDbContext, DbContext>();
 
             return services;
+
+            void ConfigureDapper()
+            {
+                DefaultTypeMap.MatchNamesWithUnderscores = true;
+            }
+
+            void ConfigureDapperExtensions()
+            {
+                var dialect = new MySqlDialect();
+                var asemblies = new List<Assembly>{Assembly.GetExecutingAssembly()};
+                var mapper = typeof(ClassMapper<>);
+
+                DapperExtensions.DapperExtensions.Configure(mapper, asemblies, dialect);
+                DapperExtensions.DapperAsyncExtensions.Configure(mapper, asemblies, dialect);
+            }
         }
     }
 }

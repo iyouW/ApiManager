@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiManager.Api.Application.Services;
 using ApiManager.Core.Repositories;
 using ApiManager.Infra.Dal;
 using ApiManager.Infra.Repositories;
@@ -35,8 +36,11 @@ namespace ApiManager.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiManager.Api", Version = "v1" });
             });
+
             services.AddDAL(Configuration.GetSection("Dal"));
             services.AddRepository();
+
+            services.AddApplicationServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

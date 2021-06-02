@@ -16,6 +16,8 @@ namespace ApiManager.Infra.Dal.Context
 
         private IConnectionFactory _factory;
 
+        private List<Func<IDbConnection, IDbTransaction, Task>> _commands = new List<Func<IDbConnection, IDbTransaction, Task>>();
+
         public DbContext(IConnectionFactory factory)
         {
             _factory = factory;
@@ -57,8 +59,17 @@ namespace ApiManager.Infra.Dal.Context
             }
         }
 
-        public async Task<T> InsertAsync<T>(T model)
+        public Task<IEnumerable<T>> GetListAsync<T>()
             where T : class
+        {
+            using var conn = _factory.Create();
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
+            return conn.GetListAsync<T>();
+        }
+        public Task<T> GetByIdAsync<T,TKey>(TKey id) where T : class
         {
             using (var conn = _factory.Create())
             {
@@ -66,9 +77,47 @@ namespace ApiManager.Infra.Dal.Context
                 {
                     conn.Open();
                 }
-                _ = await conn.InsertAsync<T>(model);
-                return model;
+                return  conn.GetAsync<T>(id);
             }
+        }
+
+        public void AddCommand(Func<IDbConnection, IDbTransaction, Task> command)
+        {
+            _commands.Add(command);
+        }
+
+        public void AddCommands(IEnumerable<Func<IDbConnection, IDbTransaction, Task>> commands)
+        {
+            _commands.AddRange(commands);
+        }
+
+        public async Task<int> SaveChangeAsync()
+        {
+            using var conn = _factory.Create();
+            if (conn.State == ConnectionState.Closed)
+            {
+                conn.Open();
+            }
+            var trans = conn.BeginTransaction();
+            try
+            {
+                foreach (var command in _commands)
+                {
+                    await command(conn, trans);
+                }
+                trans.Commit();
+            }
+            catch (Exception)
+            {
+                trans.Rollback();
+            }
+            finally
+            {
+                trans.Dispose();
+            }
+            var res = _commands.Count;
+            _commands.Clear();
+            return res;
         }
     }
 }

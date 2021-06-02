@@ -9,25 +9,10 @@ using System.Threading.Tasks;
 
 namespace ApiManager.Infra.Repositories
 {
-    public class ProjectRepository : IProjectRepository
+    public class ProjectRepository : RepositoryBase<Project, string>, IProjectRepository
     {
-        private readonly IDbContext _context;
-
-        public ProjectRepository(IDbContext context)
+        public ProjectRepository(IDbContext context) : base(context)
         {
-            _context = context;
-        }
-
-        public Task<Project> GetById(string id)
-        {
-            var sql = "select * from project where id = @id";
-            return _context.QuerySingleOrDefaultAsync<Project>(sql, new { id });
-        }
-
-        public async Task<string> AddAsync(Project project)
-        {
-            var res = await _context.InsertAsync(project);
-            return res.Id;
         }
     }
 }
