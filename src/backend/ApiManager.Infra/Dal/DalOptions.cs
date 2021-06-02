@@ -8,6 +8,6 @@ namespace ApiManager.Infra.Dal
 {
     public class DalOptions
     {
-        public string ConnectionString { get; set; }
+        public string? ConnectionString { get; set; }
     }
 }

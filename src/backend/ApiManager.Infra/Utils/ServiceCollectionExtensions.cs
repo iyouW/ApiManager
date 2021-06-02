@@ -19,11 +19,11 @@ namespace ApiManager.Infra.Utils
 
         private static IServiceCollection RegisterDependency(this IServiceCollection services, Assembly assembly, string pattern, Action<Type, Type> register)
         {
-            var types = assembly.ExportedTypes.Where(x => x.FullName.EndsWith(pattern));
+            var types = assembly.ExportedTypes.Where(x => x.FullName?.EndsWith(pattern) ?? false);
 
             foreach (var type in types)
             {
-                var interfaces = type.GetInterfaces().Where(x => x.FullName.EndsWith(pattern));
+                var interfaces = type.GetInterfaces().Where(x => x.FullName?.EndsWith(pattern) ?? false);
                 foreach (var interf in interfaces)
                 {
                     register(interf, type);

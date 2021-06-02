@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -69,6 +70,20 @@ namespace ApiManager.Infra.Dal.Context
             }
             return conn.GetListAsync<T>();
         }
+
+
+        public Task<IEnumerable<T>> GetListAsync<T>(Expression<Func<T,object>> expression)
+            where T : class
+        {
+            using var conn = _factory.Create();
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
+            var predicate = Predicates.Field<T>(expression, Operator.Eq, true);
+            return conn.GetListAsync<T>(predicate);
+        }
+
 
         public Task<T> GetByIdAsync<T,TKey>(TKey id) where T : class
         {

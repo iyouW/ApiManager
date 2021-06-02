@@ -27,6 +27,8 @@ export default {
     methods:{
         async onSave(){
             await this.projectBuilder.saveAsync()
+            this.$Notice.success({title:"创建成功"})
+            this.$router.push("/project")
         }
     }
 }

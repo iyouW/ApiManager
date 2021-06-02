@@ -17,5 +17,12 @@ export class ProjectBuilder {
         const name = this.name
         const description = this.description
         await this._gateway.addAsync({name, description})
+        this.clear()
+    }
+
+
+    clear(){
+        this.name = ''
+        this.description = ''
     }
 }
