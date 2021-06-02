@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace ApiManager.Infra.EntityMapper
 {
-    public class SubCategoryMapper : ClassMapper<SubCategory>
+    public class ModuleMapper : ClassMapper<Module>
     {
-        public SubCategoryMapper()
+        public ModuleMapper()
         {
-            Table("sub_category");
+            Table(nameof(Module).ToLower());
 
             Map(p => p.Id).Column("id").Key(KeyType.Assigned);
 

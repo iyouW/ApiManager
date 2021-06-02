@@ -9,29 +9,29 @@ namespace ApiManager.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectController : ControllerBase
+    public class VersionController : ControllerBase
     {
-        private readonly IProjectService _service;
+        private readonly IVersionService _service;
 
-        public ProjectController(IProjectService service)
+        public VersionController(IVersionService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public Task<IEnumerable<Project>> List()
+        public Task<IEnumerable<Core.Entities.Version>> List()
         {
             return _service.GetListAsync();
         }
 
         [HttpGet("{id}")]
-        public Task<Project> GetById(string id)
+        public Task<Core.Entities.Version> GetById(string id)
         {
             return _service.GetByIdAsync(id);
         }
 
         [HttpPost]
-        public Task<Project> Post(Project request)
+        public Task<Core.Entities.Version> Post(Core.Entities.Version request)
         {
             request.Id = Guid.NewGuid().ToString();
             return _service.AddAsync(request);

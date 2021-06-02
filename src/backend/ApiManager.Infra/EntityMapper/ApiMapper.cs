@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace ApiManager.Infra.EntityMapper
 {
-    public class SubCategoryMapper : ClassMapper<SubCategory>
+    public class ApiMapper : ClassMapper<Api>
     {
-        public SubCategoryMapper()
+        public ApiMapper()
         {
-            Table("sub_category");
+            Table(nameof(Api).ToLower());
 
             Map(p => p.Id).Column("id").Key(KeyType.Assigned);
 
@@ -20,9 +20,21 @@ namespace ApiManager.Infra.EntityMapper
 
             Map(p => p.Description).Column("description");
 
+            Map(p => p.IsSupported).Column("is_supported");
+
+            Map(p => p.IsParameterStandard).Column("is_parameter_standard");
+
+            Map(p => p.MapName).Column("map_name");
+
             Map(p => p.ProjectId).Column("project_id");
 
             Map(p => p.CategoryId).Column("category_id");
+
+            Map(p => p.SubCategroyId).Column("sub_category_id");
+
+            Map(p => p.ModuleId).Column("module_id");
+
+            Map(p => p.ProxyId).Column("proxy_id");
         }
     }
 }

@@ -5,24 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Version = ApiManager.Core.Entities.Version;
 
 namespace ApiManager.Infra.EntityMapper
 {
-    public class SubCategoryMapper : ClassMapper<SubCategory>
+    public class VersionMapper : ClassMapper<Version>
     {
-        public SubCategoryMapper()
+        public VersionMapper()
         {
-            Table("sub_category");
+            Table(nameof(Version).ToLower());
 
             Map(p => p.Id).Column("id").Key(KeyType.Assigned);
 
             Map(p => p.Name).Column("name");
 
             Map(p => p.Description).Column("description");
-
-            Map(p => p.ProjectId).Column("project_id");
-
-            Map(p => p.CategoryId).Column("category_id");
         }
     }
 }

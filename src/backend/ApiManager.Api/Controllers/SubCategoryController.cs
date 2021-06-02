@@ -9,29 +9,29 @@ namespace ApiManager.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectController : ControllerBase
+    public class SubCategoryController : ControllerBase
     {
-        private readonly IProjectService _service;
+        private readonly ISubCategoryService _service;
 
-        public ProjectController(IProjectService service)
+        public SubCategoryController(ISubCategoryService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public Task<IEnumerable<Project>> List()
+        public Task<IEnumerable<SubCategory>> List()
         {
             return _service.GetListAsync();
         }
 
         [HttpGet("{id}")]
-        public Task<Project> GetById(string id)
+        public Task<SubCategory> GetById(string id)
         {
             return _service.GetByIdAsync(id);
         }
 
         [HttpPost]
-        public Task<Project> Post(Project request)
+        public Task<SubCategory> Post(SubCategory request)
         {
             request.Id = Guid.NewGuid().ToString();
             return _service.AddAsync(request);

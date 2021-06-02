@@ -9,29 +9,29 @@ namespace ApiManager.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProjectController : ControllerBase
+    public class ProxyController : ControllerBase
     {
-        private readonly IProjectService _service;
+        private readonly IProxyService _service;
 
-        public ProjectController(IProjectService service)
+        public ProxyController(IProxyService service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public Task<IEnumerable<Project>> List()
+        public Task<IEnumerable<Proxy>> List()
         {
             return _service.GetListAsync();
         }
 
         [HttpGet("{id}")]
-        public Task<Project> GetById(string id)
+        public Task<Proxy> GetById(string id)
         {
             return _service.GetByIdAsync(id);
         }
 
         [HttpPost]
-        public Task<Project> Post(Project request)
+        public Task<Proxy> Post(Proxy request)
         {
             request.Id = Guid.NewGuid().ToString();
             return _service.AddAsync(request);
