@@ -19,7 +19,6 @@ namespace ApiManager.Infra.Dal.Factory
             Options = options.CurrentValue;
         }
 
-
         public IDbConnection Create()
         {
             return new MySqlConnection(Options.ConnectionString);

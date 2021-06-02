@@ -69,6 +69,7 @@ namespace ApiManager.Infra.Dal.Context
             }
             return conn.GetListAsync<T>();
         }
+
         public Task<T> GetByIdAsync<T,TKey>(TKey id) where T : class
         {
             using (var conn = _factory.Create())
