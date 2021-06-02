@@ -9,8 +9,6 @@ namespace ApiManager.Core.Entities
         public bool IsParameterStandard {get; set;}
         public string? MapName {get; set;}
         public string? ProjectId {get; set;}
-        public string? CategoryId {get; set;}
-        public string? SubCategroyId {get; set;}
         public string? ModuleId {get; set;}
         public string? ProxyId {get; set;}
     }

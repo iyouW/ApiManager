@@ -21,8 +21,6 @@ namespace ApiManager.Infra.EntityMapper
             Map(p => p.Description).Column("description");
 
             Map(p => p.ProjectId).Column("project_id");
-
-            Map(p => p.CategoryId).Column("category_id");
         }
     }
 }

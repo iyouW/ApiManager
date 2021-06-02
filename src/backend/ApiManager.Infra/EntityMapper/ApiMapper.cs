@@ -28,10 +28,6 @@ namespace ApiManager.Infra.EntityMapper
 
             Map(p => p.ProjectId).Column("project_id");
 
-            Map(p => p.CategoryId).Column("category_id");
-
-            Map(p => p.SubCategroyId).Column("sub_category_id");
-
             Map(p => p.ModuleId).Column("module_id");
 
             Map(p => p.ProxyId).Column("proxy_id");

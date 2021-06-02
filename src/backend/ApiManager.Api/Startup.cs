@@ -37,6 +37,11 @@ namespace ApiManager.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiManager.Api", Version = "v1" });
             });
 
+            services.AddCors( options =>
+            {
+                options.AddDefaultPolicy(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader());
+            });
+
             services.AddDAL(Configuration.GetSection("Dal"));
             services.AddRepository();
 
@@ -53,7 +58,7 @@ namespace ApiManager.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiManager.Api v1"));
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseCors();
 
