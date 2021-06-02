@@ -8,8 +8,8 @@ export class ApiGateway{
         return this._http.get(url)
     }
 
-    addAsync({name,description,isSupported,isParameterStandard,mapName,projectId,moduleId,proxyId} = payload){
+    addAsync({name,description,isSupported,isParameterStandard,mapName,projectId,moduleId,proxyId}){
         const url = 'api'
-        return this._http.post(url, payload);
+        return this._http.post(url, {name,description,isSupported,isParameterStandard,mapName,projectId,moduleId,proxyId})
     }
 }

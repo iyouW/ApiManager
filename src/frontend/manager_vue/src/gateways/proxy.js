@@ -8,8 +8,8 @@ export class ProxyGateway{
         return this._http.get(url)
     }
 
-    addAsync({name,description,projectId} = payload){
+    addAsync({name,description,projectId}){
         const url = 'proxy'
-        return this._http.post(url, payload);
+        return this._http.post(url, {name,description,projectId})
     }
 }

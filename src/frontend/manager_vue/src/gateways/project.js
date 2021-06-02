@@ -8,8 +8,8 @@ export class ProjectGateway{
         return this._http.get(url)
     }
 
-    addAsync({name,description} = payload){
+    addAsync({name,description}){
         const url = 'project'
-        return this._http.post(url, payload);
+        return this._http.post(url, {name, description})
     }
-}
+} 
