@@ -1,7 +1,7 @@
 
 <template>
-    <div class="parameter-editor-item">
-        <div class="parameter-editor-item-header">
+    <div class="parameter-editor">
+        <div class="parameter-editor-header">
             <div class="expander">
                 <Icon size="20" v-if="hasChidlren(parameter)" type="md-arrow-dropright" class="c-p" :class="{'down':showChildren}" @click.stop="showChildren=!showChildren" />
             </div>
@@ -22,15 +22,15 @@
                 <Icon v-show="!isDisabled(parameter)" type="md-trash" class="c-p" @click.stop="()=>remove(parameter)"/>   
             </div>
         </div>
-        <div class="parameter-editor-item-children" v-if="hasChidlren(parameter) && showChildren">
-            <parameter-editor-item v-for="(vc,i) in parameter.children" :key="i" :parameter="vc" />
+        <div class="parameter-editor-children" v-if="hasChidlren(parameter) && showChildren">
+            <parameter-editor v-for="(vc,i) in parameter.children" :key="i" :parameter="vc" />
         </div>
     </div>
 </template>
 <script>
-import ParameterType from '../../../core/enums/parameterType'
+import ParameterType from '../core/enums/parameterType'
 export default {
-    name:'ParameterEditorItem',
+    name:'ParameterEditor',
     props:{
         parameter:{
             type:Object,
@@ -112,12 +112,12 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.parameter-editor-item{
+.parameter-editor{
     width: 100%;
 
     margin-bottom: 10px;
 
-    .parameter-editor-item-header{
+    .parameter-editor-header{
         width: 100%;
         display: flex;
         flex-direction: row;
@@ -153,7 +153,7 @@ export default {
         }
     }
 
-    .parameter-editor-item-children{
+    .parameter-editor-children{
         padding-left: 10px;
     }
 }
