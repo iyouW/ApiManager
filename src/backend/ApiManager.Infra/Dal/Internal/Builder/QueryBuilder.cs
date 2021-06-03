@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApiManager.Infra.Dal.Internal
+namespace ApiManager.Infra.Dal.Internal.Builder
 {
     internal class QueryBuilder<T> where T : class
     {

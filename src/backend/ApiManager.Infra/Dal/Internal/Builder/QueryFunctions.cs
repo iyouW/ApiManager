@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApiManager.Infra.Dal.Internal
+namespace ApiManager.Infra.Dal.Internal.Builder
 {
     public static class QueryFunctions
     {

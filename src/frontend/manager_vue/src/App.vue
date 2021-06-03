@@ -3,7 +3,7 @@
     <Header></Header>
     <Content>
       <Row type="flex" justify="center">
-        <Col span="12">
+        <Col span="18">
           <div class="app-container">
             <router-view />
           </div>

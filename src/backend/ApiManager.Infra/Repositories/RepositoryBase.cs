@@ -1,6 +1,5 @@
 ﻿using ApiManager.Core.Repositories;
 using ApiManager.Infra.Dal.Abstraction;
-using ApiManager.Infra.Dal.Internal;
 using DapperExtensions;
 using System;
 using System.Collections.Generic;
@@ -28,12 +27,7 @@ namespace ApiManager.Infra.Repositories
 
         public async Task<IEnumerable<T>> GetListAsync(Expression<Func<T, bool>> expression)
         {
-            var predicates = QueryBuilder<T>.FromExpression(expression);
-            if (predicates is null)
-            {
-                return Enumerable.Empty<T>();
-            }
-            return await _context.GetListAsync<T>(predicates);
+            return await _context.GetListAsync<T>(expression);
         }
 
         public Task<T> GetByIdAsync(TKey id)

@@ -1,4 +1,5 @@
 ﻿using ApiManager.Infra.Dal.Abstraction;
+using ApiManager.Infra.Dal.Internal.ExpressionEx;
 using Dapper;
 using DapperExtensions;
 using MySql.Data.MySqlClient;
@@ -60,7 +61,7 @@ namespace ApiManager.Infra.Dal.Context
             }
         }
 
-        public Task<IEnumerable<T>> GetListAsync<T>(object? predicate = null, List<ISort>? sort = null)
+        public Task<IEnumerable<T>> GetListAsync<T>(object? predicate = null, IList<ISort>? sort = null)
             where T : class
         {
             using var conn = _factory.Create();
@@ -68,6 +69,18 @@ namespace ApiManager.Infra.Dal.Context
             {
                 conn.Open();
             }
+            return conn.GetListAsync<T>(predicate, sort);
+        }
+
+        public Task<IEnumerable<T>> GetListAsync<T>(Expression<Func<T,bool>> expression , IList<ISort>? sort = null)
+            where T : class
+        {
+            using var conn = _factory.Create();
+            if (conn.State != ConnectionState.Open)
+            {
+                conn.Open();
+            }
+            var predicate = expression.ToDapperPredicate();
             return conn.GetListAsync<T>(predicate, sort);
         }
 
