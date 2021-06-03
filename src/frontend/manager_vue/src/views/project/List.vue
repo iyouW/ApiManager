@@ -3,7 +3,12 @@
         <div slot="title">
             <Button type="success" icon="md-add" to="/addProject">新增项目</Button>
         </div>
-        <Table :columns="columns" :data="projectList.list"></Table>
+        <Table max-height="600" :columns="columns" :data="projectList.list">
+            <template slot='action' slot-scope="{row}">
+                <Button type="primary" size="small" :to="`/${row.id}/module`" class="m-r-5">管理模块</Button>
+                <Button type="primary" size="small" :to="`/${row.id}/proxy`">管理代理</Button>
+            </template>
+        </Table>
     </Card>
 </template>
 <script>
@@ -15,7 +20,8 @@ export default {
                 {
                     type: 'index',
                     width: 60,
-                    align: 'center'
+                    align: 'center',
+                    title:'序号'
                 },
                 {
                     title:'名称',
@@ -24,6 +30,13 @@ export default {
                 {
                     title:'描述',
                     key:'description'
+                },
+                {
+                    title:'操作',
+                    slot:'action',
+                    fixed:'right',
+                    width:180,
+                    align:'center'
                 }
             ]
         }

@@ -8,6 +8,11 @@ export class ModuleGateway{
         return this._http.get(url)
     }
 
+    listByProjectIdAsync(projectId){
+        const url = `${projectId}/module`
+        return this._http.get(url)
+    }
+
     addAsync({name,description,projectId}){
         const url = 'module'
         return this._http.post(url, {name,description,projectId})

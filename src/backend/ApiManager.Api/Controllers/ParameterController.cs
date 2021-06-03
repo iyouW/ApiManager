@@ -24,6 +24,13 @@ namespace ApiManager.Api.Controllers
             return _service.GetListAsync();
         }
 
+        [Route("/api/{apiId}/[controller]")]
+        [HttpGet]
+        public Task<IEnumerable<Parameter>> ListWithinApi(string apiId)
+        {
+            return _service.GetListByApiIdAsync(apiId);
+        }
+
         [HttpGet("{id}")]
         public Task<Parameter> GetById(string id)
         {

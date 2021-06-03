@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,8 @@ namespace ApiManager.Core.Repositories
         where T : class
     {
         Task<IEnumerable<T>> GetListAsync();
+
+        Task<IEnumerable<T>> GetListAsync(Expression<Func<T,bool>> expression);
         Task<T> GetByIdAsync(TKey id);
 
         void Add(T entity);

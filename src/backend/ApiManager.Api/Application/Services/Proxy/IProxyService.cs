@@ -9,5 +9,6 @@ namespace ApiManager.Api.Application.Services.Project
         Task<Proxy> AddAsync(Proxy project);
         Task<Proxy> GetByIdAsync(string id);
         Task<IEnumerable<Proxy>> GetListAsync();
+        Task<IEnumerable<Proxy>> GetListByProjectIdAsync(string projectId);
     }
 }

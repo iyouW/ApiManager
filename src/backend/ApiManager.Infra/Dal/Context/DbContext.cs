@@ -60,7 +60,7 @@ namespace ApiManager.Infra.Dal.Context
             }
         }
 
-        public Task<IEnumerable<T>> GetListAsync<T>()
+        public Task<IEnumerable<T>> GetListAsync<T>(object? predicate = null, List<ISort>? sort = null)
             where T : class
         {
             using var conn = _factory.Create();
@@ -68,22 +68,8 @@ namespace ApiManager.Infra.Dal.Context
             {
                 conn.Open();
             }
-            return conn.GetListAsync<T>();
+            return conn.GetListAsync<T>(predicate, sort);
         }
-
-
-        public Task<IEnumerable<T>> GetListAsync<T>(Expression<Func<T,object>> expression)
-            where T : class
-        {
-            using var conn = _factory.Create();
-            if (conn.State != ConnectionState.Open)
-            {
-                conn.Open();
-            }
-            var predicate = Predicates.Field<T>(expression, Operator.Eq, true);
-            return conn.GetListAsync<T>(predicate);
-        }
-
 
         public Task<T> GetByIdAsync<T,TKey>(TKey id) where T : class
         {

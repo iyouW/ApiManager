@@ -23,6 +23,13 @@ namespace ApiManager.Api.Controllers
             return _service.GetListAsync();
         }
 
+        [Route("/api/{projectId}/{moduleId}/[controller]")]
+        [HttpGet]
+        public Task<IEnumerable<Core.Entities.Api>> ListWithModule(string projectId, string moduleId)
+        {
+            return _service.GetListWithinModuleAsync(projectId, moduleId);
+        }
+
         [HttpGet("{id}")]
         public Task<Core.Entities.Api> GetById(string id)
         {

@@ -8,5 +8,6 @@ namespace ApiManager.Api.Application.Services.Project
         Task<Core.Entities.Api> AddAsync(Core.Entities.Api project);
         Task<Core.Entities.Api> GetByIdAsync(string id);
         Task<IEnumerable<Core.Entities.Api>> GetListAsync();
+        Task<IEnumerable<Core.Entities.Api>> GetListWithinModuleAsync(string projectId, string moduleId);
     }
 }

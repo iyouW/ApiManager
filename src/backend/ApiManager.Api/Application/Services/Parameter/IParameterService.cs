@@ -9,5 +9,6 @@ namespace ApiManager.Api.Application.Services.Project
         Task<Parameter> AddAsync(Parameter project);
         Task<Parameter> GetByIdAsync(string id);
         Task<IEnumerable<Parameter>> GetListAsync();
+        Task<IEnumerable<Parameter>> GetListByApiIdAsync(string apiId);
     }
 }

@@ -13,7 +13,7 @@
                 <Input v-model="projectBuilder.name" placeholder="请输入项目名称"></Input>
             </FormItem>
             <FormItem label="描述">
-                <Input v-model="projectBuilder.description" placeholder="请输入项目描述"></Input>
+                <Input type="textarea" :rows="5" v-model="projectBuilder.description" placeholder="请输入项目描述"></Input>
             </FormItem>
         </Form>
     </Card>
@@ -33,8 +33,3 @@ export default {
     }
 }
 </script>
-<style lang="less" scoped>
-.t-a-r{
-    text-align: right;
-}
-</style>

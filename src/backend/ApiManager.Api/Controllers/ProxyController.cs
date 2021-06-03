@@ -23,6 +23,13 @@ namespace ApiManager.Api.Controllers
         {
             return _service.GetListAsync();
         }
+        
+        [Route("/api/{projectId}/[controller]")]
+        [HttpGet]
+        public Task<IEnumerable<Proxy>> ListByProjectId(string projectId)
+        {
+            return _service.GetListByProjectIdAsync(projectId);
+        }
 
         [HttpGet("{id}")]
         public Task<Proxy> GetById(string id)

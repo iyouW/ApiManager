@@ -9,6 +9,5 @@ namespace ApiManager.Core.Repositories
 {
     public interface IModuleRepository : IRepositoryBase<Module,string>
     {
-
     }
 }

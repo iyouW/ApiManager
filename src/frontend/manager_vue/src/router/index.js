@@ -9,12 +9,12 @@ const routes = [
     redirect:'/project'
   },
   {
-    path: '/project/:projectId/module/:moduleId/api',
+    path: '/:projectId/:moduleId/api',
     component: () => import('../views/api/List.vue')
   },
   {
-    path: '/project/:projectId/module/:moduleId/addApi',
-    component: ()=> import('../views/project/Add.vue')
+    path: '/:projectId/:moduleId/addApi',
+    component: ()=> import('../views/api/Add.vue')
   },
   {
     path: '/app',
@@ -25,11 +25,11 @@ const routes = [
     component: ()=> import('../views/app/Add.vue')
   },
   {
-    path: '/project/:projectId/module',
+    path: '/:projectId/module',
     component: () => import('../views/module/List.vue')
   },
   {
-    path: '/project/:projectId/addModule',
+    path: '/:projectId/addModule',
     component: ()=> import('../views/module/Add.vue')
   },
   {
@@ -41,11 +41,11 @@ const routes = [
     component: ()=> import('../views/project/Add.vue')
   },
   {
-    path: '/project/:projectId/proxy',
+    path: '/:projectId/proxy',
     component: () => import('../views/proxy/List.vue')
   },
   {
-    path: '/project/:projectId/addProxy',
+    path: '/:projectId/addProxy',
     component: ()=> import('../views/proxy/Add.vue')
   },
   {
@@ -55,6 +55,10 @@ const routes = [
   {
     path: '/addVersion',
     component: ()=> import('../views/version/Add.vue')
+  },
+  {
+    path: '/:projectId/:moduleId/:apiId/parameter',
+    component: ()=> import('../views/parameter/Index.vue')
   }
 ]
 

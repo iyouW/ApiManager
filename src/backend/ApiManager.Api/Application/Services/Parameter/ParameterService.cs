@@ -28,6 +28,11 @@ namespace ApiManager.Api.Application.Services.Project
             return _repo.GetListAsync();
         }
 
+        public Task<IEnumerable<Core.Entities.Parameter>> GetListByApiIdAsync(string apiId)
+        {
+            return _repo.GetListAsync(x => x.ApiId == apiId);
+        }
+
         public async Task<Core.Entities.Parameter> AddAsync(Core.Entities.Parameter project)
         {
             _repo.Add(project);
