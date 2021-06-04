@@ -16,7 +16,10 @@ namespace ApiManager.Core.Repositories
         Task<T> GetByIdAsync(TKey id);
 
         void Add(T entity);
+        void AddRange(IEnumerable<T> entities);
+
         void Update(T entity);
         void Delete(T entity);
+        void Delete(Expression<Func<T, bool>> expression);
     }
 }

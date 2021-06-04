@@ -6,8 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="dapper" Version="2.0.90" />
-    <PackageReference Include="DapperExtensions" Version="1.6.3" />
     <PackageReference Include="fluid.core" Version="2.0.13" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
@@ -19,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApiManager.Core\ApiManager.Core.csproj" />
+    <ProjectReference Include="..\ApiManager.DapperExtensions\ApiManager.DapperExtensions.csproj" />
   </ItemGroup>
 
 </Project>

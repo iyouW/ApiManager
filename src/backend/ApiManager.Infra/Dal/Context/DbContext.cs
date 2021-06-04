@@ -122,7 +122,7 @@ namespace ApiManager.Infra.Dal.Context
                 }
                 trans.Commit();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 trans.Rollback();
             }

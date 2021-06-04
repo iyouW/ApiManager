@@ -18,6 +18,8 @@ export class ParameterNode {
         'Exception' : 3
     }
 
+    static None = new ParameterNode()
+
     static IsRoot(parameterNode){
         return parameterNode.name === ParameterNode.RootName
     }
@@ -30,32 +32,47 @@ export class ParameterNode {
         return parameterNode.type === ParameterNode.Type.Object
     }
 
-    static CreateRoot(category){
+    static CreateRoot(category, apiId){
         const node = new ParameterNode()
         node.name = ParameterNode.RootName
-        node.type = ParameterNode.Object
+        node.type = ParameterNode.Type.Object
         node.category = category
+        node.apiId = apiId
         return node
     }
 
-    static CreateArrayItem(parent,category){
+    static CreateArrayItem(parent,category,apiId){
         const node = new ParameterNode()
         node.name = ParameterNode.ArrayItemName
         node.parent = parent
         node.category = category
+        node.apiId = apiId
         return node
     }
 
-    static CreateEmptyNode(parent, category){
+    static CreateEmptyNode(parent, category, apiId){
         const node = new ParameterNode()
         node.parent = parent
         node.category = category
+        node.apiId = apiId
         return node
+    }
+
+    static FromParameter(node){
+        const res = new ParameterNode()
+        res.name = node.name
+        res.description = node.description
+        res.comment = node.comment
+        res.type = node.type
+        res.category = node.category
+        res.apiId = node.apiId
+        return res
     }
 
     constructor(){
         this.name = ''
         this.description = ''
+        this.comment = ''
         this.type = ParameterNode.Type.String
         this.category = -1
         this.apiId = ''

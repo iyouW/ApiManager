@@ -1,4 +1,5 @@
-﻿using ApiManager.Api.Application.Services.Project;
+﻿using ApiManager.Api.Application.Model.Request.Api;
+using ApiManager.Api.Application.Services.Project;
 using ApiManager.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -42,6 +43,12 @@ namespace ApiManager.Api.Controllers
         {
             request.Id = Guid.NewGuid().ToString();
             return _service.AddAsync(request);
+        }
+
+        [HttpPost("save")]
+        public Task Save(SaveApiParameterRequest request)
+        {
+            return _service.SaveAsync(request);
         }
     }
 }

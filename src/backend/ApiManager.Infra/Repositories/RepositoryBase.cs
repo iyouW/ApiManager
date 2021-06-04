@@ -1,5 +1,6 @@
 ﻿using ApiManager.Core.Repositories;
 using ApiManager.Infra.Dal.Abstraction;
+using ApiManager.Infra.Dal.Internal.ExpressionEx;
 using DapperExtensions;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,11 @@ namespace ApiManager.Infra.Repositories
             _context.AddCommand((conn, trans) => conn.InsertAsync(entity));
         }
 
+        public void AddRange(IEnumerable<T> entities)
+        {
+            _context.AddCommand((conn, trans) => conn.InsertAsync(entities));
+        }
+
         public void Update(T entity)
         {
             _context.AddCommand((conn, trans) => conn.UpdateAsync(entity));
@@ -48,6 +54,12 @@ namespace ApiManager.Infra.Repositories
         public void Delete(T entity)
         {
             _context.AddCommand((conn, trans) => conn.DeleteAsync(entity));
+        }
+
+        public void Delete(Expression<Func<T, bool>> expression)
+        {
+            var predicate = expression.ToDapperPredicate();
+            _context.AddCommand((conn, trans) => conn.DeleteAsync<T>(predicate));
         }
     }
 }

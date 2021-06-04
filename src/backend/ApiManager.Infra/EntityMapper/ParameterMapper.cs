@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Parameter = ApiManager.Core.Entities.Parameter;
 
 namespace ApiManager.Infra.EntityMapper
 {
-    public class ParameterMapper : ClassMapper<Parameter>
+    public class ParameterMapper : ClassMapper<Core.Entities.Parameter>
     {
         public ParameterMapper()
         {

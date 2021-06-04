@@ -3,26 +3,26 @@
     <div class="parameter-editor">
         <div class="parameter-editor-header">
             <div class="expander">
-                <Icon size="20" v-if="hasChidlren(parameter)" type="md-arrow-dropright" class="c-p" :class="{'down':showChildren}" @click.stop="showChildren=!showChildren" />
+                <Icon size="20" v-if="hasChidlren" type="md-arrow-dropright" class="c-p" :class="{'down':showChildren}" @click.stop="showChildren=!showChildren" />
             </div>
             <div class="name">
-                <Input v-model="parameter.name" :disabled="isDisabled(parameter)"></Input>
+                <Input v-model="parameter.name" :disabled="isDisabled" placeholder="请输入参数名称"></Input>
             </div>
             <div class="type">
-                <Select v-model="parameter.type" :disabled="isRoot(parameter)" @on-change="onTypeChanged">
+                <Select v-model="parameter.type" :disabled="isRoot" @on-change="onTypeChanged">
                     <Option v-for="(v,i) in types" :key="i" :value="v">{{i}}</Option>
                 </Select>
             </div>
             <div class="comment">
-                <Input v-model="parameter.comment"></Input>
+                <Input v-model="parameter.comment" placeholder="请输入参数注释"></Input>
             </div>
             <div class="action">
-                <Icon v-show="!isRoot(parameter)" type="md-add-circle" size="20" class="m-r-5 c-p" @click.stop="()=>addSibling(parameter)" />
-                <Icon v-show="isObjectType(parameter)" type="md-add" size="20" class="m-r-5 c-p" @click.stop="()=>addChild(parameter)"  />
-                <Icon v-show="!isDisabled(parameter)" type="md-trash" class="c-p" @click.stop="()=>remove(parameter)"/>   
+                <Icon v-show="!isDisabled" type="md-add-circle" size="20" class="m-r-5 c-p" @click.stop="addSibling" />
+                <Icon v-show="isObjectType" type="md-add" size="20" class="m-r-5 c-p" @click.stop="addChild"  />
+                <Icon v-show="!isDisabled" type="md-trash" class="c-p" @click.stop="remove"/>   
             </div>
         </div>
-        <div class="parameter-editor-children" v-if="hasChidlren(parameter) && showChildren">
+        <div class="parameter-editor-children" v-if="hasChidlren && showChildren">
             <parameter-editor v-for="(vc,i) in parameter.children" :key="i" :parameter="vc" />
         </div>
     </div>
@@ -36,60 +36,55 @@ export default {
         parameter:{
             type:Object,
             default: ()=>null
-        },
-        parameterType:{
-            type:Number,
-            default: ParameterNode.Category.Input
         }
     },
     data(){
         return {
-            showChildren:false
+            showChildren:true
         }
     },
     computed:{
         types(){
             return ParameterNode.Type
         },
+        hasChidlren(){
+            return this.parameter.children && this.parameter.children.length > 0 
+        },
+        isDisabled(){
+            return this.isRoot || this.isArrayItem
+        },
+        isRoot(){
+            return ParameterNode.IsRoot(this.parameter)
+        },
+        isArrayItem(){
+            return ParameterNode.IsArrayItems(this.parameter)
+        },
+        isObjectType(){
+            return ParameterNode.IsObject(this.parameter)
+        }
     },
     methods:{
-        hasChidlren(p){
-            return p.children && p.children.length > 0 
+        addSibling(){
+            const p = this.parameter
+            const sibling = ParameterNode.CreateEmptyNode(p.parent, p.category, p.apiId)
+            p.parent.children.push(sibling)
         },
-        isDisabled(p){
-            return this.isRoot(p) || this.isArrayItem(p)
-        },
-        isRoot(p){
-            return ParameterNode.IsRoot(p)
-        },
-        isArrayItem(p){
-            return ParameterNode.IsArrayItems(p)
-        },
-        isObjectType(p){
-            return ParameterNode.IsObject(p)
-        },
-        addSibling(p){
-            p.parent.children.push(ParameterNode.CreateEmptyNode(p.parent))
-        },
-        addChild(p){
-            const child = ParameterNode.CreateEmptyNode(p)
-            if(p.children){
-                p.children.push(child)
-            }else{
-                p.children = [child]
-            }
+        addChild(){
+            const p = this.parameter
+            const child = ParameterNode.CreateEmptyNode(p, p.category, p.apiId)
+            p.children.push(child)
             if(!this.showChildren){
                 this.showChildren = true
             }
         },
-        remove(p){
-            const arr = p.parent.children
-            arr.splice(arr.findIndex(x=>x === p),1)
+        remove(){
+            this.parameter.remove()
         },
         onTypeChanged(parameterType){
+            const p = this.parameter
             if(ParameterNode.Type.Array === parameterType){
-                const item = ParameterNode.CreateArrayItem(this.parameter, this.parameterType)
-                this.parameter.children = [item]
+                const item = ParameterNode.CreateArrayItem(p, p.category, p.apiId)
+                p.children.push(item)
                 if(!this.showChildren){
                     this.showChildren = true
                 }
