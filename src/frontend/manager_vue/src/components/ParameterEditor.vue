@@ -28,13 +28,18 @@
     </div>
 </template>
 <script>
-import ParameterType from '../core/enums/parameterType'
+import { ParameterNode } from '../core/parameter/parameterNode'
+
 export default {
     name:'ParameterEditor',
     props:{
         parameter:{
             type:Object,
             default: ()=>null
+        },
+        parameterType:{
+            type:Number,
+            default: ParameterNode.Category.Input
         }
     },
     data(){
@@ -44,7 +49,7 @@ export default {
     },
     computed:{
         types(){
-            return ParameterType
+            return ParameterNode.Type
         },
     },
     methods:{
@@ -55,30 +60,19 @@ export default {
             return this.isRoot(p) || this.isArrayItem(p)
         },
         isRoot(p){
-            return p.name === 'root'
+            return ParameterNode.IsRoot(p)
         },
         isArrayItem(p){
-            return p.name === 'items'
+            return ParameterNode.IsArrayItems(p)
         },
         isObjectType(p){
-            return p.type === ParameterType.Object
+            return ParameterNode.IsObject(p)
         },
         addSibling(p){
-            const sibling = {
-                name:'',
-                type:ParameterType.String,
-                parent:p.parent,
-                children:[]
-            }
-            p.parent.children.push(sibling)
+            p.parent.children.push(ParameterNode.CreateEmptyNode(p.parent))
         },
         addChild(p){
-            const child = {
-                name:'',
-                type:ParameterType.String,
-                parent:p,
-                children:[]
-            }
+            const child = ParameterNode.CreateEmptyNode(p)
             if(p.children){
                 p.children.push(child)
             }else{
@@ -92,14 +86,9 @@ export default {
             const arr = p.parent.children
             arr.splice(arr.findIndex(x=>x === p),1)
         },
-        onTypeChanged(e){
-            if(ParameterType.Array === e){
-                const item = {
-                    name:'items',
-                    type: ParameterType.String,
-                    parent: this.parameter,
-                    children:[]
-                }
+        onTypeChanged(parameterType){
+            if(ParameterNode.Type.Array === parameterType){
+                const item = ParameterNode.CreateArrayItem(this.parameter, this.parameterType)
                 this.parameter.children = [item]
                 if(!this.showChildren){
                     this.showChildren = true

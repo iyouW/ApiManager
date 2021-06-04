@@ -16,7 +16,7 @@
                 {{ column? '是' : '否' }}
             </template>
             <template slot-scope="{ row }" slot="action">
-                <Button type="primary" size="small" :to="`/${projectId}/${moduelId}/${row.id}/parameter`">管理接口参数</Button>
+                <Button type="primary" size="small" :to="`/${projectId}/${moduleId}/${row.id}/parameter`">管理接口参数</Button>
             </template>
         </Table>
     </Card>

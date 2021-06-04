@@ -30,14 +30,44 @@ export class ParameterNode {
         return parameterNode.type === ParameterNode.Type.Object
     }
 
+    static CreateRoot(category){
+        const node = new ParameterNode()
+        node.name = ParameterNode.RootName
+        node.type = ParameterNode.Object
+        node.category = category
+        return node
+    }
+
+    static CreateArrayItem(parent,category){
+        const node = new ParameterNode()
+        node.name = ParameterNode.ArrayItemName
+        node.parent = parent
+        node.category = category
+        return node
+    }
+
+    static CreateEmptyNode(parent, category){
+        const node = new ParameterNode()
+        node.parent = parent
+        node.category = category
+        return node
+    }
+
     constructor(){
         this.name = ''
         this.description = ''
-        this.type = ParameterNode.String
+        this.type = ParameterNode.Type.String
         this.category = -1
         this.apiId = ''
 
         this.parent = null
         this.children = []
+    }
+
+    remove(){
+        if(this.parent){
+            const container = this.parent.children
+            container.splice(container.findIndex(x => x === this ),1)
+        }
     }
 }
