@@ -1,9 +1,11 @@
 <template>
     <Card>
         <div slot="title">
-            <Button type="success" icon="md-add" to="/addProject">新增项目</Button>
+            <Button type="success" icon="md-add" class="m-r-5" to="/addProject">新增项目</Button>
+            <Button type="primary" icon="ios-water" class="m-r-5" @click.stop="onGenerateCode">生成Bridge代码</Button>
+            <Button type="primary" icon="md-sunny" @click.stop="onGenerateCode">生成示例代码</Button>
         </div>
-        <Table max-height="600" :columns="columns" :data="projectList.list">
+        <Table max-height="600" :columns="columns" :data="projectList.list" @on-selection-change="onSelectionChanged">
             <template slot='action' slot-scope="{row}">
                 <Button type="primary" size="small" :to="`/${row.id}/module`" class="m-r-5">管理模块</Button>
                 <Button type="primary" size="small" :to="`/${row.id}/proxy`">管理代理</Button>
@@ -17,6 +19,11 @@ export default {
     data(){
         return {
             columns:[
+                {
+                    type: 'selection',
+                    width: 60,
+                    align: 'center'
+                },
                 {
                     type: 'index',
                     width: 60,
@@ -46,6 +53,11 @@ export default {
     },
     async created(){
         await this.projectList.initAsync()
+    },
+    methods:{
+        onSelectionChanged(e){
+            console.log(e)
+        }
     }
 }
 </script>
