@@ -30,6 +30,18 @@ namespace ApiManager.Infra.EntityMapper
             Map(p => p.ApiId).Column("api_id");
 
             Map(p => p.ParentId).Column("parent_id");
+
+            Map(p => p.Mock).Column("mock");
+
+            Map(p => p.IsDeleted).Column("is_deleted");
+
+            Map(p => p.CreatedDate).Column("created_date");
+
+            Map(p => p.LatestUpdatedDate).Column("latest_updated_date");
+
+            Map(p => p.CreatedAccountId).Column("created_account_id");
+
+            Map(p => p.LatestUpdatedAccountId).Column("latest_updated_account_id");
         }
     }
 }

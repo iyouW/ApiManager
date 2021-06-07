@@ -1,0 +1,38 @@
+<template>
+  <div class="wrapper">
+    <InterfacePageTemplate :options="config">
+      <div class="input-wrapper" slot="specialBlock">
+        <label for="word">支持动态入参：</label>
+        <input class="input" id="word" type="text" v-model="inputVal" />
+      </div>
+    </InterfacePageTemplate>
+  </div>
+</template>
+
+<script>
+import InterfacePageTemplate from '@/components/InterfacePageTemplate'
+export default {
+  components: {
+    InterfacePageTemplate,
+  },
+  data: () => ({
+    inputVal: '',
+    config: {
+      apiName: '{{ api.Name }}',
+      detail: '{{ api.Description }}'
+    },
+  }),
+  watch: {
+    inputVal(newValue) {
+      this.config.params = newValue
+    },
+  },
+}
+</script>
+
+<style lang="scss" scoped>
+.wrapper {
+  // border: 1px solid #f00;
+  height: calc(100vh - 110px);
+}
+</style>

@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ApiManager.Api.Application.Model.Request.CodeGenerator;
+using ApiManager.Api.Application.Services.CodeGenerator;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace ApiManager.Api.Controllers
 {
@@ -10,11 +14,39 @@ namespace ApiManager.Api.Controllers
     [ApiController]
     public class CodeGeneratorController : ControllerBase
     {
+        private readonly ICodeGeneratorService _service;
+
+        public CodeGeneratorController(ICodeGeneratorService service)
+        {
+            _service = service;
+        }
 
         [HttpPost("bridge")]
-        public IActionResult GenerateBridge()
+        public async Task<IActionResult> GenerateBridge(GenerateBridgeRequest request)
         {
-            throw new NotImplementedException();
+            var stream = await _service.GenerateBridgeAsync(request.ProjectId);
+            var fileName = "temp.zip";
+            if (stream is FileStream s)
+            {
+                fileName = Path.GetFileName(s.Name);
+            }
+            Response.Headers.Add("File-Name", fileName);
+            Response.Headers.Add("Content-Disposition", $"attachment;filename={fileName}");
+            return File(stream, "application/octet-stream", HttpUtility.UrlEncode(fileName));
+        }
+
+        [HttpPost("example")]
+        public async Task<IActionResult> GenerateExample(GenerateBridgeRequest request)
+        {
+            var stream = await _service.GenerateExampleAsync(request.ProjectId);
+            var fileName = "temp.zip";
+            if (stream is FileStream s)
+            {
+                fileName = Path.GetFileName(s.Name);
+            }
+            Response.Headers.Add("File-Name", fileName);
+            Response.Headers.Add("Content-Disposition", $"attachment;filename={fileName}");
+            return File(stream, "application/octet-stream", HttpUtility.UrlEncode(fileName));
         }
     }
 }

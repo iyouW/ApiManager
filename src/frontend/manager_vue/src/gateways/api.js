@@ -13,8 +13,8 @@ export class ApiGateway{
         return this._http.get(url)
     }
 
-    addAsync({name,description,isSupported,isParameterStandard,mapName,projectId,moduleId,proxyId}){
+    addAsync({name,description,isSupported,isParameterStandard,mapName,projectId,moduleId,proxyId, author, supportedApp}){
         const url = 'api'
-        return this._http.post(url, {name,description,isSupported,isParameterStandard,mapName,projectId,moduleId,proxyId})
+        return this._http.post(url, {name,description,isSupported,isParameterStandard,mapName,projectId,moduleId,proxyId,author, supportedApp})
     }
 }

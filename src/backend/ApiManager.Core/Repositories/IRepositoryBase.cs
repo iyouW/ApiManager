@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApiManager.Core.Entities.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace ApiManager.Core.Repositories
 {
     public interface IRepositoryBase<T,TKey>
-        where T : class
+        where T : class, IEntityBase<TKey>
     {
         Task<IEnumerable<T>> GetListAsync();
 

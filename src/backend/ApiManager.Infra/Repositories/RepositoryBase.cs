@@ -1,4 +1,5 @@
-﻿using ApiManager.Core.Repositories;
+﻿using ApiManager.Core.Entities.Abstractions;
+using ApiManager.Core.Repositories;
 using ApiManager.Infra.Dal.Abstraction;
 using ApiManager.Infra.Dal.Internal.ExpressionEx;
 using DapperExtensions;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace ApiManager.Infra.Repositories
 {
     public class RepositoryBase<T, TKey> : IRepositoryBase<T, TKey>
-        where T : class
+        where T : class, IEntityBase<TKey>
     {
         protected IDbContext _context;
 
@@ -38,17 +39,30 @@ namespace ApiManager.Infra.Repositories
 
         public void Add(T entity)
         {
+            entity.LatestUpdatedDate = entity.CreatedDate = DateTime.Now;
             _context.AddCommand((conn, trans) => conn.InsertAsync(entity));
         }
 
         public void AddRange(IEnumerable<T> entities)
         {
+            foreach (var entity in entities)
+            {
+                entity.LatestUpdatedDate = entity.CreatedDate = DateTime.Now;
+            }
             _context.AddCommand((conn, trans) => conn.InsertAsync(entities));
         }
 
         public void Update(T entity)
         {
+            entity.LatestUpdatedDate = DateTime.Now;
             _context.AddCommand((conn, trans) => conn.UpdateAsync(entity));
+        }
+
+        public void SoftDelete(T entity)
+        {
+            entity.IsDeleted = true;
+            entity.LatestUpdatedDate = DateTime.Now;
+            Update(entity);
         }
 
         public void Delete(T entity)

@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiManager.Api.Application.Queries;
 using ApiManager.Api.Application.Services;
 using ApiManager.Core.Repositories;
+using ApiManager.Infra.CodeGenerator;
 using ApiManager.Infra.Dal;
 using ApiManager.Infra.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -39,13 +41,16 @@ namespace ApiManager.Api
 
             services.AddCors( options =>
             {
-                options.AddDefaultPolicy(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyHeader());
+                options.AddDefaultPolicy(o => o.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
 
             services.AddDAL(Configuration.GetSection("Dal"));
             services.AddRepository();
 
             services.AddApplicationServices();
+
+            services.AddAppQuery();
+            services.AddCodeEngine();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

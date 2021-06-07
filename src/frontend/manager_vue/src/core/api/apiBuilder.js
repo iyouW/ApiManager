@@ -13,6 +13,8 @@ export class ApiBuilder {
         this.description = ''
         this.isSupported = false
         this.isParameterStandard = false
+        this.author = ''
+        this.supportedApp = ''
         this.mapName = ''
         this.proxyId = ''
 
@@ -30,6 +32,8 @@ export class ApiBuilder {
         const proxyId = this.proxyId
         const projectId = this.projectId
         const moduleId = this.moduleId
-        await apiGateway.addAsync({name, description, isSupported, isParameterStandard,mapName,proxyId,projectId,moduleId})
+        const author = this.author
+        const supportedApp = this.supportedApp
+        await apiGateway.addAsync({name, description, isSupported, isParameterStandard,mapName,proxyId,projectId,moduleId, author, supportedApp})
     }
 }

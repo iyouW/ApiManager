@@ -6,6 +6,9 @@ const instance = axios.create({
 });
 
 instance.interceptors.response.use(res=>{
+    if(res.config.responseType){
+        return res
+    }
     return res.data
 },err=>{
     console.log(err)

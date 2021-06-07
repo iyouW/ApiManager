@@ -1,17 +1,18 @@
+using ApiManager.Core.Entities.Abstractions;
 using System.ComponentModel;
 
 namespace ApiManager.Core.Entities
 {
-    public class Parameter
+    public class Parameter : EntityBase<string>
     {
-        public string? Id {get; set;}
-        public string? Name {get; set;}
+        public string Name {get; set;}
         public string? Description {get; set;}
         public string? Comment { get; set;}
         public ParameterType Type { get; set; }
         public ParameterCategory Category { get; set; }
-        public string? ApiId {get; set;}
+        public string ApiId {get; set;}
         public string? ParentId {get; set;}
+        public string Mock { get; set; }
     }
 
     public enum ParameterType

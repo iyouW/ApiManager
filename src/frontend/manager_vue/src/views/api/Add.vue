@@ -22,6 +22,12 @@
             <FormItem label="映射名称">
                 <Input v-model="apiBuilder.mapName" placeholder="请输入接口映射名称" ></Input>
             </FormItem>
+            <FormItem label="作者">
+                <Input v-model="apiBuilder.author" placeholder="请输入接口作者名称" ></Input>
+            </FormItem>
+            <FormItem label="支持的app">
+                <Input v-model="apiBuilder.supportedApp" placeholder="请输入支持接口的应用及版本" ></Input>
+            </FormItem>
             <FormItem label="请选择代理">
                 <Select v-model="apiBuilder.proxyId" clearable placeholder="请输入接口映射名称" >
                     <Option v-for="(v,i) in proxyList.list" :key="i" :value="v.id">{{v.name}}</Option>

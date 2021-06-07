@@ -15,7 +15,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Model\Response\" />
+    <Folder Include="Template\" />
+    <Folder Include="Temporary\Zips\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Template\bridge.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

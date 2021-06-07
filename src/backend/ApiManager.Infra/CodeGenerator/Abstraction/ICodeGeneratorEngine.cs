@@ -8,5 +8,6 @@ namespace ApiManager.Infra.CodeGenerator.Abstraction
 {
     public interface ICodeGeneratorEngine
     {
+        Task<string> GenerateAsync(string template, object model);
     }
 }

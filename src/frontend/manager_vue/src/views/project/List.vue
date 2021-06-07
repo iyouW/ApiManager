@@ -3,7 +3,7 @@
         <div slot="title">
             <Button type="success" icon="md-add" class="m-r-5" to="/addProject">新增项目</Button>
             <Button type="primary" icon="ios-water" class="m-r-5" @click.stop="onGenerateCode">生成Bridge代码</Button>
-            <Button type="primary" icon="md-sunny" @click.stop="onGenerateCode">生成示例代码</Button>
+            <Button type="primary" icon="md-sunny" @click.stop="onGenerateExample">生成示例代码</Button>
         </div>
         <Table max-height="600" :columns="columns" :data="projectList.list" @on-selection-change="onSelectionChanged">
             <template slot='action' slot-scope="{row}">
@@ -56,7 +56,14 @@ export default {
     },
     methods:{
         onSelectionChanged(e){
+            this.projectList.selectedProject = e[0]
             console.log(e)
+        },
+        async onGenerateCode(){
+            await this.projectList.generateCodeAsync()
+        },
+        async onGenerateExample(){
+            await this.projectList.generateExampleAsync()
         }
     }
 }

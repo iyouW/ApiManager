@@ -1,0 +1,35 @@
+import { {% for proxy in proxies %}{{ proxy.Name }}{% if forloop.last != true %},{% endif %}{% endfor %} } from './../common/commonCommand.js'
+
+export default { {% for api in module.Apis %}{% if api.IsSupported %}
+    /**
+     * {{ api.Description }}
+     * @param { Object } params 输入参数
+     {% for param in api.Input %}{% if param.Name != 'root' %}
+     * @param { {{ param.TypeDesc }} } params.{{param.Name}} {{ param.Comment }}
+     {% endif %}{% endfor %}
+     * @returns { Object } returns 输出参数
+     {% for param in api.Output %}{% if param.Name != 'root' %}
+     * @returns { {{ param.TypeDesc }} } returns.{{param.Name}} {{ param.Comment }}
+     {% endif %}{% endfor %}
+     */
+    {{ api.Name }}({% if api.Input %} params {% endif %}){
+        {% if api.Proxy.Name == 'commandInterface' and api.IsParameterStandard == true %}
+        return {{ api.Proxy.Name }}({
+            operation:'{{api.OperationName}}'{% if api.Input %},
+            params
+            {% endif %}
+        })
+        {% elsif api.Proxy.Name == 'commandInterface' and api.IsParameterStandard == false %}
+        return {{ api.Proxy.Name }}({
+            operation:'{{api.OperationName}}'{% if api.Input %},
+            ...params
+            {% endif %}
+        })
+        {% else %}
+            return {{ api.Proxy.Name }}({{api.OperationName}}{% if api.Input %},params{% endif %})
+        {% endif %}
+    }{% if forloop.last != true %},{% endif %}
+    {% endif %}{% endfor %}
+}
+
+

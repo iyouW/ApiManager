@@ -5,3 +5,7 @@ package-lock.json
 .vs
 .vscode
 .git
+Temporary
+*.zip
+*.csproj.user
+.editorconfig

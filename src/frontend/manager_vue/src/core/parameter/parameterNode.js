@@ -66,6 +66,7 @@ export class ParameterNode {
         res.type = node.type
         res.category = node.category
         res.apiId = node.apiId
+        res.mock = node.mock
         return res
     }
 
@@ -75,6 +76,7 @@ export class ParameterNode {
         this.comment = ''
         this.type = ParameterNode.Type.String
         this.category = -1
+        this.mock = ''
         this.apiId = ''
 
         this.parent = null
