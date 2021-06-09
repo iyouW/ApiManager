@@ -26,7 +26,7 @@ export default { {% for api in module.Apis %}{% if api.IsSupported %}
             {% endif %}
         })
         {% else %}
-            return {{ api.Proxy.Name }}({{api.OperationName}}{% if api.Input %},params{% endif %})
+        return {{ api.Proxy.Name }}('{{api.OperationName}}'{% if api.Input %},params{% endif %})
         {% endif %}
     }{% if forloop.last != true %},{% endif %}
     {% endif %}{% endfor %}

@@ -24,6 +24,8 @@ FROM
     parameter
 WHERE
     api_id IN @apiIds
+ORDER BY
+    created_date DESC
             ";
 
             var param = new

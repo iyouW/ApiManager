@@ -24,6 +24,8 @@ FROM
     project
 WHERE
     id = @projectId
+ORDER BY
+    created_date DESC
             ";
 
             var param = new
