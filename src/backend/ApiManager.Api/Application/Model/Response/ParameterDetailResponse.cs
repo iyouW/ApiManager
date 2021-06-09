@@ -17,5 +17,7 @@ namespace ApiManager.Api.Application.Model.Response
             ParameterType.Object => "Object",
             _ => string.Empty
         };
+
+        public IEnumerable<ParameterDetailResponse> Children { get; set; } = Enumerable.Empty<ParameterDetailResponse>();
     }
 }

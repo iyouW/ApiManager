@@ -25,8 +25,6 @@ FROM
     proxy
 WHERE
     project_id = @projectId
-ORDER BY
-    created_date DESC
             ";
 
             var param = new

@@ -29,8 +29,6 @@ FROM
 WHERE
     project_id = @projectId
     AND module_id = @moduleId
-ORDER BY
-    created_date DESC
             ";
 
             var param = new

@@ -30,8 +30,8 @@ namespace ApiManager.Api.Controllers
             {
                 fileName = Path.GetFileName(s.Name);
             }
-            Response.Headers.Add("File-Name", fileName);
-            Response.Headers.Add("Content-Disposition", $"attachment;filename={fileName}");
+            Response.Headers.Add("Access-Control-Expose-Headers", "X-File-Name");
+            Response.Headers.Add("X-File-Name", fileName);
             return File(stream, "application/octet-stream", HttpUtility.UrlEncode(fileName));
         }
 
@@ -44,8 +44,8 @@ namespace ApiManager.Api.Controllers
             {
                 fileName = Path.GetFileName(s.Name);
             }
-            Response.Headers.Add("File-Name", fileName);
-            Response.Headers.Add("Content-Disposition", $"attachment;filename={fileName}");
+            Response.Headers.Add("Access-Control-Expose-Headers", "X-File-Name");
+            Response.Headers.Add("X-File-Name", fileName);
             return File(stream, "application/octet-stream", HttpUtility.UrlEncode(fileName));
         }
     }

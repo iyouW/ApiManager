@@ -19,7 +19,7 @@ export class ProjectGateway{
         const link = document.createElement('a')
         const file = new Blob([res.data])
         const downloadUrl = window.URL.createObjectURL(file)
-        const fileName = '下载.zip'
+        const fileName = res.headers['x-file-name'] || '下载.zip'
         link.href = downloadUrl
         link.download = fileName
         link.click()
@@ -32,7 +32,7 @@ export class ProjectGateway{
         const link = document.createElement('a')
         const file = new Blob([res.data])
         const downloadUrl = window.URL.createObjectURL(file)
-        const fileName = '下载.zip'
+        const fileName =  res.headers['x-file-name'] || '下载.zip'
         link.href = downloadUrl
         link.download = fileName
         link.click()
