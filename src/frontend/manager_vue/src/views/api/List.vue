@@ -9,11 +9,11 @@
             </Col>
         </Row>
         <Table max-height="600" :columns="columns" :data="apiList.list">
-            <template slot-scope="{ column }" slot="isSupported" >
-                {{ column? '是' : '否' }}
+            <template slot-scope="{ row }" slot="isSupported" >
+                {{ row.isSupported ? '是' : '否' }}
             </template>
-            <template slot-scope="{ column }" slot="isParameterStandard" >
-                {{ column? '是' : '否' }}
+            <template slot-scope="{ row }" slot="isParameterStandard" >
+                {{ row.isParameterStandard ? '是' : '否' }}
             </template>
             <template slot-scope="{ row }" slot="action">
                 <Button type="primary" size="small" :to="`/${projectId}/${moduleId}/${row.id}/parameter`">管理接口参数</Button>

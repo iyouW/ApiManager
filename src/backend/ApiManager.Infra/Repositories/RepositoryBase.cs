@@ -29,7 +29,16 @@ namespace ApiManager.Infra.Repositories
 
         public async Task<IEnumerable<T>> GetListAsync(Expression<Func<T, bool>> expression)
         {
-            return await _context.GetListAsync<T>(expression);
+            var sorts = new List<ISort>
+            {
+                new Sort
+                {
+                    PropertyName = "CreatedDate",
+                    Ascending = false
+                }
+            };
+
+            return await _context.GetListAsync<T>(expression, sorts);
         }
 
         public Task<T> GetByIdAsync(TKey id)
