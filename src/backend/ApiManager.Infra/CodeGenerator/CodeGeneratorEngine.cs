@@ -8,12 +8,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.FileProviders;
 
 namespace ApiManager.Infra.CodeGenerator
 {
     public class CodeGeneratorEngine : ICodeGeneratorEngine
     {
+        static CodeGeneratorEngine()
+        {
+            TemplateOptions.Default.FileProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory());
+        }
+
         private static readonly ConcurrentDictionary<string, Task<IFluidTemplate>> _templateDict = new ConcurrentDictionary<string, Task<IFluidTemplate>>();
+
         public async Task<string> GenerateAsync(string template, object model)
         {
             var fluidTemplate = await GetTemplateAsync(template);
