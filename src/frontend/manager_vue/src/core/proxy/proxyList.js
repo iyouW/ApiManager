@@ -20,4 +20,9 @@ export class ProxyList {
         }
         this.list = await this._gateway.listByProjectIdAsync(this.projectId)
     }
+
+    async deleteAsync(row){
+        this.list = this.list.filter(x => x.id !== row.id)
+        await this._gateway.deleteAsync(row.id)
+    }
 }

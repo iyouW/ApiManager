@@ -8,7 +8,12 @@
                 <Button type="warning" icon="md-arrow-round-back" :to="`/project`">返回</Button>
             </Col>
         </Row>
-        <Table max-height="600" :columns="columns" :data="proxyList.list"></Table>
+        <Table max-height="600" :columns="columns" :data="proxyList.list">
+            <template slot="action" slot-scope="{ row }">
+                <Button class="m-r-5" type="primary" size="small" :to="`/${projectId}/addProxy?proxyId=${row.id}`">编辑</Button>
+                <Button type="error" size="small" @click.stop="()=>onDelete(row)" >删除</Button>
+            </template>
+        </Table>
     </Card>
 </template>
 <script>
@@ -30,6 +35,13 @@ export default {
                 {
                     title:'代理描述',
                     key:'description'
+                },
+                {
+                    title:'操作',
+                    slot:'action',
+                    fixed:'right',
+                    width:260,
+                    align:'center'
                 }
             ]
         }
@@ -43,6 +55,11 @@ export default {
     async created(){
         this.proxyList.projectId = this.projectId
         await this.proxyList.initAsync()
+    },
+    methods:{
+        async onDelete(row){
+            await this.proxyList.deleteAsync(row)
+        }
     }
 }
 </script>

@@ -57,6 +57,9 @@ namespace DapperExtensions
         /// The asynchronous counterpart to <see cref="IDapperImplementor.Delete{T}(IDbConnection, object, IDbTransaction, int?)"/>.
         /// </summary>
         Task<bool> DeleteAsync<T>(IDbConnection connection, object predicate, IDbTransaction transaction, int? commandTimeout) where T : class;
+
+
+        Task<int> UpdatePartialAsync<T>(IDbConnection connection, object props, object predicate, IDbTransaction transaction, int? commandTimeout) where T : class;
     }
 
     public class DapperAsyncImplementor : DapperImplementor, IDapperAsyncImplementor
@@ -308,6 +311,24 @@ namespace DapperExtensions
             string sql = SqlGenerator.Count(classMap, wherePredicate, parameters);
             DynamicParameters dynamicParameters =GetDynamicParameters(parameters);
             return (int)(await connection.QueryAsync(sql, dynamicParameters, transaction, commandTimeout, CommandType.Text)).Single().Total;
+        }
+
+
+        public async Task<int> UpdatePartialAsync<T>(IDbConnection connection, object props, object predicate, IDbTransaction transaction, int? commandTimeout) where T : class
+        {
+            IClassMapper classMap = SqlGenerator.Configuration.GetMap<T>();
+            IPredicate wherePredicate = GetPredicate(classMap, predicate);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            var propValues = ReflectionHelper.GetObjectValuesPlain(props);
+            var propKeys = propValues.Keys.ToHashSet(StringComparer.OrdinalIgnoreCase);
+            string sql = SqlGenerator.Update(classMap, wherePredicate, parameters, true, propKeys);
+            DynamicParameters dynamicParameters = GetDynamicParameters(parameters);
+            foreach (var property in propValues)
+            {
+                dynamicParameters.Add(property.Key, property.Value);
+            }
+
+            return await connection.ExecuteAsync(sql, dynamicParameters, transaction, commandTimeout, CommandType.Text).ConfigureAwait(false);
         }
 
         #endregion

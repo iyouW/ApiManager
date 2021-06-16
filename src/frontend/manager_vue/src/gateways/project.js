@@ -8,9 +8,24 @@ export class ProjectGateway{
         return this._http.get(url)
     }
 
+    getAsync(id){
+        const url = `project/${id}`
+        return this._http.get(url)
+    }
+
     addAsync({name,description}){
         const url = 'project'
         return this._http.post(url, {name, description})
+    }
+
+    updateAsync({id,name, description}){
+        const url = `project`
+        return this._http.put(url, {id, name, description})
+    }
+
+    deleteAsync(id){
+        const url = `project/${id}`
+        return this._http.delete(url)
     }
 
     async generateCodeAsync({projectId}){

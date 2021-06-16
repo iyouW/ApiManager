@@ -11,16 +11,16 @@ namespace ApiManager.Core.Repositories
     public interface IRepositoryBase<T,TKey>
         where T : class, IEntityBase<TKey>
     {
-        Task<IEnumerable<T>> GetListAsync();
-
-        Task<IEnumerable<T>> GetListAsync(Expression<Func<T,bool>> expression);
-        Task<T> GetByIdAsync(TKey id);
+        Task<IEnumerable<T>> GetListAsync(Expression<Func<T, bool>>? expression = null);
+        Task<T> GetAsync(TKey id);
 
         void Add(T entity);
         void AddRange(IEnumerable<T> entities);
 
         void Update(T entity);
-        void Delete(T entity);
+        void UpdatePartial(Expression<Func<T, bool>> expression, object properties);
+
+        void Delete(TKey id);
         void Delete(Expression<Func<T, bool>> expression);
     }
 }

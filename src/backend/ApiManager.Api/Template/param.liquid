@@ -1,0 +1,20 @@
+{% for param in params -%}
+* @
+{%- case category -%}
+    {%- when 'input' -%}
+        param
+    {%- when 'output' -%}
+        return
+    {%- else -%}
+        exceptions
+{%- endcase %} { {{ param.TypeDesc }} } {{ suffix }}.{{ param.Name}} {{param.Comment}}
+    {% if param.Children != empty -%}
+        {% assign old = suffix -%}
+        {% capture suffix -%}{{suffix}}.{{param.Name}}{% endcapture -%}
+        {% assign params = param.Children -%}
+        {% assign category = category -%}
+        {% include "./Template/param.liquid" -%}
+        {% assign suffix = old -%}
+    {% endif -%}
+{% endfor -%}
+

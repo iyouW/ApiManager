@@ -19,7 +19,13 @@ export default {
     inputVal: '',
     config: {
       apiName: '{{ api.Name }}',
-      detail: '{{ api.Description }}'
+      detail: '{{ api.Description }}',
+      {% if api.InputRoot -%}
+      params:{
+        {% assign children = api.InputRoot -%}
+        {% include './Template/paramo.liquid' -%}
+      }
+      {%- endif %}
     },
   }),
   watch: {

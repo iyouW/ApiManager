@@ -26,15 +26,25 @@ export default {
         projectId(){
             return this.$route.params.projectId
         },
+        proxyId(){
+            return this.$route.query.proxyId
+        },
         proxyPath(){
             return `/${this.projectId}/proxy`
+        }
+    },
+    async created(){
+        if(this.proxyId){
+            this.proxyBuilder.clear()
+            this.proxyBuilder.id = this.proxyId
+            await this.proxyBuilder.getAsync()
         }
     },
     methods:{
         async onSave(){
             this.proxyBuilder.projectId = this.projectId
             await this.proxyBuilder.saveAsync()
-            this.$Notice.success({title:"创建成功"})
+            this.$Notice.success({title:"保存成功"})
             this.$router.push(this.proxyPath)
         }
     }

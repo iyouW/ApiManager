@@ -20,7 +20,7 @@ namespace ApiManager.Api.Application.Services.Project
 
         public Task<Core.Entities.Version> GetByIdAsync(string id)
         {
-            return _repo.GetByIdAsync(id);
+            return _repo.GetAsync(id);
         }
 
         public Task<IEnumerable<Core.Entities.Version>> GetListAsync()

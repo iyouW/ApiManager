@@ -85,7 +85,17 @@ namespace ApiManager.Api.Application.Services.CodeGenerator
                 module,
                 proxies = project.Proxies.Where(x => module.Apis.Any(o => o.ProxyId == x.Id))
             };
-            var content = await _engine.GenerateAsync("template/bridge.liquid", model);
+            var content = string.Empty;
+            try
+            {
+                 content = await _engine.GenerateAsync("template/bridge.liquid", model);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
             var modulePath = Path.Combine(projectDir, $"{module.Name}.js");
             await File.WriteAllTextAsync(modulePath, content);
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ApiManager.Api.Application.Model.Request.Api;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ApiManager.Api.Application.Services.Project
@@ -9,5 +10,7 @@ namespace ApiManager.Api.Application.Services.Project
         Task<Core.Entities.Api> GetByIdAsync(string id);
         Task<IEnumerable<Core.Entities.Api>> GetListAsync();
         Task<IEnumerable<Core.Entities.Api>> GetListWithinModuleAsync(string projectId, string moduleId);
+        Task UpdateAsync(UpdateApiRequest request);
+        Task DeleteAsync(string id);
     }
 }

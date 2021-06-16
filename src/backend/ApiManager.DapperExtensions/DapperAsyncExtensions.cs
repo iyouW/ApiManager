@@ -210,5 +210,10 @@ namespace DapperExtensions
         {
             return await Instance.GetSetAsync<T>(connection, predicate, sort, firstResult, maxResults, transaction, commandTimeout);
         }
+
+        public static Task<int> UpdatePartialAsync<T>(this IDbConnection connection, object props, object predicate, IDbTransaction transaction, int? commandTimeout = null) where T : class
+        {
+            return Instance.UpdatePartialAsync<T>(connection, props, predicate, transaction, commandTimeout);
+        }
     }
 }

@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace ApiManager.Api.Application.Model.Request.Project
 {
-    public class AddProjectRequest
+    public class UpdateProjectRequest
     {
+        public string Id { get; set; }
         public string Name { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; }
     }
 }

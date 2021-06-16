@@ -1,4 +1,5 @@
-﻿using ApiManager.Api.Application.Services.Project;
+﻿using ApiManager.Api.Application.Model.Request.Api;
+using ApiManager.Api.Application.Services.Project;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,18 @@ namespace ApiManager.Api.Controllers
         {
             request.Id = Guid.NewGuid().ToString();
             return _service.AddAsync(request);
+        }
+
+        [HttpPut]
+        public Task Put(UpdateApiRequest request)
+        {
+            return _service.UpdateAsync(request);
+        }
+
+        [HttpDelete("{id}")]
+        public Task Delete(string id)
+        {
+            return _service.DeleteAsync(id);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ApiManager.Api.Application.Services.Project;
+﻿using ApiManager.Api.Application.Model.Request.Proxy;
+using ApiManager.Api.Application.Services.Project;
 using ApiManager.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -42,6 +43,18 @@ namespace ApiManager.Api.Controllers
         {
             request.Id = Guid.NewGuid().ToString();
             return _service.AddAsync(request);
+        }
+
+        [HttpPut]
+        public Task Put(UpdateProxyRequest request)
+        {
+            return _service.UpdateAsync(request);
+        }
+
+        [HttpDelete("{id}")]
+        public Task Delete(string id)
+        {
+            return _service.DeleteAsync(id);
         }
     }
 }
