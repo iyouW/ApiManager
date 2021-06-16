@@ -16,6 +16,8 @@
                 {{ row.isParameterStandard ? '是' : '否' }}
             </template>
             <template slot-scope="{ row }" slot="action">
+                <Button class="m-r-5" type="primary" size="small" :to="`/${projectId}/${moduleId}/addApi?apiId=${row.id}`">编辑</Button>
+                <Button class="m-r-5" type="error" size="small" @click.stop="()=>onDelete(row)">删除</Button>
                 <Button type="primary" size="small" :to="`/${projectId}/${moduleId}/${row.id}/parameter`">管理接口参数</Button>
             </template>
         </Table>
@@ -56,7 +58,7 @@ export default {
                 {
                     title:'操作',
                     fixed:'right',
-                    width:160,
+                    width:260,
                     align:'center',
                     slot:'action'
                 }
@@ -76,6 +78,11 @@ export default {
         this.apiList.projectId = this.projectId
         this.apiList.moduleId = this.moduleId
         await this.apiList.initAsync()
+    },
+    methods:{
+        async onDelete(row){
+            await this.apiList.deleteAsync(row)
+        }
     }
 }
 </script>

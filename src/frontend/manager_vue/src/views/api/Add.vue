@@ -48,6 +48,9 @@ export default {
         moduleId(){
             return this.$route.params.moduleId
         },
+        apiId(){
+            return this.$route.query.apiId
+        },
         apiPath(){
             return `/${this.projectId}/${this.moduleId}/api`
         }
@@ -55,6 +58,11 @@ export default {
     async created(){
         this.proxyList.projectId = this.projectId
         await this.proxyList.initAsync()
+        if(this.apiId){
+            this.apiBuilder.clear()
+            this.apiBuilder.id = this.apiId
+            await this.apiBuilder.getAsync()
+        }
     },
     methods:{
         async onSave(){

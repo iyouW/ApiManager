@@ -25,4 +25,9 @@ export class ProjectList {
     async generateExampleAsync(){
         await this._gateway.generateExampleAsync({projectId: this.selectedProject.id});
     }
+
+    async deleteAsync(row){
+        this.list = this.list.filter(x => x.id !== row.id)
+        await this._gateway.deleteAsync(row.id)
+    }
 }

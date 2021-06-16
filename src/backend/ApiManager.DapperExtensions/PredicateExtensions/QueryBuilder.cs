@@ -6,11 +6,11 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApiManager.Infra.Dal.Internal.Builder
+namespace DapperExtensions.PredicateExtensions
 {
     internal class QueryBuilder<T> where T : class
     {
-        public static IPredicate? FromExpression(Expression<Func<T, bool>> expression)
+        public static IPredicate FromExpression(Expression<Func<T, bool>> expression)
         {
             if (expression == null) return null;
             return PredicateConverter.Convert(expression);
@@ -22,7 +22,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
             {
             }
 
-            public static IPredicate? Convert(Expression expression)
+            public static IPredicate Convert(Expression expression)
             {
                 if (expression.NodeType == ExpressionType.Lambda)
                     expression = ((LambdaExpression)expression).Body;
@@ -33,7 +33,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 return result;
             }
 
-            private IPredicate? ParseGroup(BinaryExpression expression)
+            private IPredicate ParseGroup(BinaryExpression expression)
             {
                 var group = new PredicateGroup { Predicates = new List<IPredicate>(2) };
                 switch (expression.NodeType)
@@ -48,7 +48,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                         throw new NotImplementedException();
                 }
 
-                PredicateGroup? g;
+                PredicateGroup g;
                 var left = this.Parse(expression.Left);
                 var right = this.Parse(expression.Right);
 
@@ -73,9 +73,9 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 return group;
             }
 
-            private IPredicate? ParseField(BinaryExpression expression)
+            private IPredicate ParseField(BinaryExpression expression)
             {
-                string? propertyName;
+                string propertyName;
                 Expression valueExpression;
 
                 if (TryGetField(expression.Left, out propertyName))
@@ -85,7 +85,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 else
                     throw new NotImplementedException("Doing something fancy?");
 
-                object? value;
+                object value;
                 if (valueExpression.NodeType == ExpressionType.Constant)
                 {
                     value = ((ConstantExpression)valueExpression).Value;
@@ -114,7 +114,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 }
             }
 
-            private IPredicate? ParseUnaryNot(UnaryExpression expression)
+            private IPredicate ParseUnaryNot(UnaryExpression expression)
             {
                 if (expression.NodeType != ExpressionType.Not)
                     throw new InvalidOperationException();
@@ -140,7 +140,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 });
             }
 
-            private IPredicate? Parse(Expression expression)
+            private IPredicate Parse(Expression expression)
             {
                 switch (expression.NodeType)
                 {
@@ -247,7 +247,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 }
             }
 
-            private IPredicate? ParseBoolMember(MemberExpression expression)
+            private IPredicate ParseBoolMember(MemberExpression expression)
             {
                 if (expression.Type == typeof(bool))
                 {
@@ -258,7 +258,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 throw new NotImplementedException(expression.Type.ToString());
             }
 
-            private IPredicate? ParseCall(MethodCallExpression expression)
+            private IPredicate ParseCall(MethodCallExpression expression)
             {
                 if (expression.Method.DeclaringType == typeof(QueryFunctions))
                     return ParseCallQueryFunction(expression);
@@ -286,12 +286,12 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 throw new NotImplementedException("ParseCall");
             }
 
-            private IPredicate? ParseCallEquals(MethodCallExpression expression)
+            private IPredicate ParseCallEquals(MethodCallExpression expression)
             {
                 var patternExpression = expression.Arguments[0];
                 var memberExpression = expression.Object as MemberExpression;
 
-                object? value = patternExpression.NodeType == ExpressionType.Constant ?
+                object value = patternExpression.NodeType == ExpressionType.Constant ?
                     ((ConstantExpression)patternExpression).Value :
                     InvokeExpression(patternExpression);
 
@@ -310,7 +310,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 };
             }
 
-            private IPredicate? ParseCallQueryFunction(MethodCallExpression expression)
+            private IPredicate ParseCallQueryFunction(MethodCallExpression expression)
             {
                 if (expression.Method.Name == "Like")
                 {
@@ -328,12 +328,12 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 throw new NotImplementedException();
             }
 
-            private IPredicate? ParseCallContains(MethodCallExpression expression)
+            private IPredicate ParseCallContains(MethodCallExpression expression)
             {
                 var patternExpression = expression.Arguments[0];
                 var memberExpression = expression.Object as MemberExpression;
 
-                object? value = patternExpression.NodeType == ExpressionType.Constant ?
+                object value = patternExpression.NodeType == ExpressionType.Constant ?
                     ((ConstantExpression)patternExpression).Value :
                     InvokeExpression(patternExpression);
 
@@ -352,12 +352,12 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 };
             }
 
-            private IPredicate? ParseCallStartsWith(MethodCallExpression expression)
+            private IPredicate ParseCallStartsWith(MethodCallExpression expression)
             {
                 var patternExpression = expression.Arguments[0];
                 var memberExpression = expression.Object as MemberExpression;
 
-                object? value = patternExpression.NodeType == ExpressionType.Constant ?
+                object value = patternExpression.NodeType == ExpressionType.Constant ?
                     ((ConstantExpression)patternExpression).Value :
                     InvokeExpression(patternExpression);
 
@@ -376,12 +376,12 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 };
             }
 
-            private IPredicate? ParseCallEndsWith(MethodCallExpression expression)
+            private IPredicate ParseCallEndsWith(MethodCallExpression expression)
             {
                 var patternExpression = expression.Arguments[0];
                 var memberExpression = expression.Object as MemberExpression;
 
-                object? value = patternExpression.NodeType == ExpressionType.Constant ?
+                object value = patternExpression.NodeType == ExpressionType.Constant ?
                     ((ConstantExpression)patternExpression).Value :
                     InvokeExpression(patternExpression);
 
@@ -400,7 +400,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 };
             }
 
-            private IPredicate? ParseCallEnumerableFunction(MethodCallExpression expression)
+            private IPredicate ParseCallEnumerableFunction(MethodCallExpression expression)
             {
                 if (expression.Method.Name == "Contains")
                 {
@@ -423,7 +423,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
                 throw new NotImplementedException();
             }
 
-            private IPredicate? ParseCallListFunction(MethodCallExpression expression)
+            private IPredicate ParseCallListFunction(MethodCallExpression expression)
             {
                 if (expression.Method.Name == "Contains")
                 {
@@ -452,7 +452,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
             }
         }
 
-        private static IPredicate? VisitPredicateTree(IPredicate predicate, Func<IPredicate, bool> callback)
+        private static IPredicate VisitPredicateTree(IPredicate predicate, Func<IPredicate, bool> callback)
         {
             if (!callback(predicate))
                 return predicate;
@@ -480,7 +480,7 @@ namespace ApiManager.Infra.Dal.Internal.Builder
             return Expression.Lambda<Func<object>>(Expression.Convert(expression, typeof(object))).Compile().Invoke();
         }
 
-        private static bool TryGetField(Expression expression, out string? name)
+        private static bool TryGetField(Expression expression, out string name)
         {
             expression = SimplifyExpression(expression);
             if (expression.NodeType == ExpressionType.MemberAccess)

@@ -7,7 +7,7 @@
         return
     {%- else -%}
         exceptions
-{%- endcase %} { {{ param.TypeDesc }} } {{ suffix }}.{{ param.Name}} {{param.comment}}
+{%- endcase %} { {{ param.TypeDesc }} } {{ suffix }}.{{ param.Name}} {{param.Comment}}
     {% if param.Children != empty -%}
         {% assign old = suffix -%}
         {% capture suffix -%}{{suffix}}.{{param.Name}}{% endcapture -%}

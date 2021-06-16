@@ -26,15 +26,25 @@ export default {
         projectId(){
             return this.$route.params.projectId
         },
+        moduleId(){
+            return this.$route.query.moduleId
+        },
         modulePath(){
             return `/${this.projectId}/module`
+        }
+    },
+    async created(){
+        if(this.moduleId){
+            this.moduleBuilder.clear()
+            this.moduleBuilder.id = this.moduleId
+            await this.moduleBuilder.getAsync()
         }
     },
     methods:{
         async onSave(){
             this.moduleBuilder.projectId = this.projectId
             await this.moduleBuilder.saveAsync()
-            this.$Notice.success({title:"创建成功"})
+            this.$Notice.success({title:"保存成功"})
             this.$router.push(this.modulePath)
         }
     }

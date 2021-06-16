@@ -10,6 +10,8 @@
         </Row>
         <Table max-height="600" :columns="columns" :data="moduleList.list">
             <template slot="action" slot-scope="{row}">
+                <Button class="m-r-5" type="primary" size="small" :to="`/${projectId}/addModule?moduleId=${row.id}`">编辑</Button>
+                <Button class="m-r-5" type="error" size="small" @click.stop="()=>onDelete(row)"  >删除</Button>
                 <Button type="primary" size="small" :to="`/${projectId}/${row.id}/api`">管理接口</Button>
             </template>
         </Table>
@@ -38,7 +40,7 @@ export default {
                 {
                     title:'操作',
                     fixed:'right',
-                    width:160,
+                    width:260,
                     align:'center',
                     slot:'action'
                 }
@@ -54,6 +56,11 @@ export default {
     async created(){
         this.moduleList.projectId = this.projectId
         await this.moduleList.initAsync()
+    },
+    methods:{
+        async onDelete(row){
+            await this.moduleList.deleteAsync(row)
+        }
     }
 }
 </script>

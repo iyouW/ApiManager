@@ -20,4 +20,9 @@ export class ApiList {
         const moduleId = this.moduleId
         this.list = await this._gateway.listWithinModuleAsync(projectId, moduleId)
     }
+
+    async deleteAsync(row){
+        this.list = this.list.filter(x => x.id !== row.id)
+        await this._gateway.deleteAsync(row.id)
+    }
 }

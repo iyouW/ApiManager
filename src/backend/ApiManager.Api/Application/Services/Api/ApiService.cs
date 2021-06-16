@@ -1,4 +1,5 @@
-﻿using ApiManager.Core.Repositories;
+﻿using ApiManager.Api.Application.Model.Request.Api;
+using ApiManager.Core.Repositories;
 using ApiManager.Infra.Dal.Abstraction;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace ApiManager.Api.Application.Services.Project
 
         public Task<Core.Entities.Api> GetByIdAsync(string id)
         {
-            return _repo.GetByIdAsync(id);
+            return _repo.GetAsync(id);
         }
 
         public Task<IEnumerable<Core.Entities.Api>> GetListAsync()
@@ -38,6 +39,18 @@ namespace ApiManager.Api.Application.Services.Project
             _repo.Add(project);
             _ = await _context.SaveChangeAsync();
             return project;
+        }
+
+        public async Task UpdateAsync(UpdateApiRequest request)
+        {
+            _repo.UpdatePartial(x => x.Id == request.Id, request);
+            _ = await _context.SaveChangeAsync();
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            _repo.Delete(id);
+            _ = await _context.SaveChangeAsync();
         }
     }
 }

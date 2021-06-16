@@ -8,7 +8,7 @@ export class ApiBuilder {
 
     constructor(gateway){
         this._gateway = gateway
-        
+        this.id = ''
         this.name = ''
         this.description = ''
         this.isSupported = false
@@ -34,6 +34,43 @@ export class ApiBuilder {
         const moduleId = this.moduleId
         const author = this.author
         const supportedApp = this.supportedApp
-        await apiGateway.addAsync({name, description, isSupported, isParameterStandard,mapName,proxyId,projectId,moduleId, author, supportedApp})
+        if(this.id){
+            const id = this.id
+            await this._gateway.UpdateAsync({id,name, description, isSupported, isParameterStandard,mapName,proxyId,author, supportedApp})
+        }else{
+            await this._gateway.addAsync({name, description, isSupported, isParameterStandard,mapName,proxyId,projectId,moduleId, author, supportedApp})
+        }
+        
+    }
+
+    async getAsync(){
+        if(this.id){
+            var res = await this._gateway.getAsync(this.id)
+            this.name = res.name
+            this.description = res.description
+            this.isSupported = res.isSupported
+            this.isParameterStandard = res.isParameterStandard
+            this.mapName = res.mapName
+            this.projectId = res.projectId
+            this.moduleId = res.moduleId
+            this.proxyId = res.proxyId
+            this.author = res.author
+            this.supportedApp = res.supportedApp
+        }
+    }
+
+    clear(){
+        this.id = ''
+        this.name = ''
+        this.description = ''
+        this.isSupported = false
+        this.isParameterStandard = false
+        this.author = ''
+        this.supportedApp = ''
+        this.mapName = ''
+        this.proxyId = ''
+
+        this.projectId = ''
+        this.moduleId = ''
     }
 }

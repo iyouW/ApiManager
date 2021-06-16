@@ -1,13 +1,11 @@
 ﻿using ApiManager.Core.Entities.Abstractions;
 using ApiManager.Core.Repositories;
 using ApiManager.Infra.Dal.Abstraction;
-using ApiManager.Infra.Dal.Internal.ExpressionEx;
 using DapperExtensions;
+using DapperExtensions.PredicateExtensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ApiManager.Infra.Repositories
@@ -22,67 +20,66 @@ namespace ApiManager.Infra.Repositories
             _context = context;
         }
 
-        public Task<IEnumerable<T>> GetListAsync()
+        public Task<T> GetAsync(TKey id)
         {
-            return _context.GetListAsync<T>();
+            return _context.GetAsync<T>(id);
         }
-
-        public async Task<IEnumerable<T>> GetListAsync(Expression<Func<T, bool>> expression)
+        public Task<IEnumerable<T>> GetListAsync(Expression<Func<T, bool>>? where = null)
         {
-            var sorts = new List<ISort>
+            where ??= x => !x.IsDeleted;
+            var predicate = where.And(x => !x.IsDeleted).ToPredicate();
+            var sort = new List<ISort>
             {
                 new Sort
                 {
-                    PropertyName = "CreatedDate",
-                    Ascending = false
+                    PropertyName = nameof(IEntityBase<TKey>.CreatedDate),
+                    Ascending = true
                 }
             };
-
-            return await _context.GetListAsync<T>(expression, sorts);
-        }
-
-        public Task<T> GetByIdAsync(TKey id)
-        {
-            return _context.GetByIdAsync<T, TKey>(id);
+            return _context.GetListAsync<T>(predicate, sort);
         }
 
         public void Add(T entity)
         {
-            entity.LatestUpdatedDate = entity.CreatedDate = DateTime.Now;
-            _context.AddCommand((conn, trans) => conn.InsertAsync(entity));
+            entity.CreatedDate = entity.LatestUpdatedDate = DateTime.Now;
+            _context.AddCommand((conn, trans) => conn.InsertAsync(entity, trans));
         }
-
         public void AddRange(IEnumerable<T> entities)
         {
             foreach (var entity in entities)
             {
-                entity.LatestUpdatedDate = entity.CreatedDate = DateTime.Now;
+                entity.CreatedDate = entity.LatestUpdatedDate = DateTime.Now;
             }
-            _context.AddCommand((conn, trans) => conn.InsertAsync(entities));
+            _context.AddCommand((conn, trans) => conn.InsertAsync(entities, trans));
+        }
+
+        public void Delete(TKey id)
+        {
+            Expression<Func<T, bool>> where = x => x.Id.Equals(id);
+            Delete(where);
+        }
+        public void Delete(Expression<Func<T, bool>> expression)
+        {
+            var predicate = expression.And(x => !x.IsDeleted).ToPredicate();
+            var props = new Dictionary<string, object>
+            {
+                [nameof(IEntityBase<TKey>.IsDeleted)] = true,
+                [nameof(IEntityBase<TKey>.LatestUpdatedDate)] = DateTime.Now
+            };
+            _context.AddCommand((conn, trans) => conn.UpdatePartialAsync<T>(props, predicate, trans));
         }
 
         public void Update(T entity)
         {
             entity.LatestUpdatedDate = DateTime.Now;
-            _context.AddCommand((conn, trans) => conn.UpdateAsync(entity));
+            _context.AddCommand((conn, trans) => conn.UpdateAsync(entity, trans));
         }
-
-        public void SoftDelete(T entity)
+        public void UpdatePartial(Expression<Func<T, bool>> where, object properties)
         {
-            entity.IsDeleted = true;
-            entity.LatestUpdatedDate = DateTime.Now;
-            Update(entity);
-        }
-
-        public void Delete(T entity)
-        {
-            _context.AddCommand((conn, trans) => conn.DeleteAsync(entity));
-        }
-
-        public void Delete(Expression<Func<T, bool>> expression)
-        {
-            var predicate = expression.ToDapperPredicate();
-            _context.AddCommand((conn, trans) => conn.DeleteAsync<T>(predicate));
+            var predicate = where.And(x => !x.IsDeleted).ToPredicate();
+            var props = ReflectionHelper.GetObjectValuesPlain(properties);
+            props.TryAdd(nameof(IEntityBase<TKey>.LatestUpdatedDate), DateTime.Now);
+            _context.AddCommand((conn, trans) => conn.UpdatePartialAsync<T>(props, predicate, trans));
         }
     }
 }

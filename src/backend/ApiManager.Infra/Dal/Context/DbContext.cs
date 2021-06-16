@@ -1,14 +1,12 @@
-﻿using ApiManager.Infra.Dal.Abstraction;
-using ApiManager.Infra.Dal.Internal.ExpressionEx;
+﻿using ApiManager.Core.Entities.Abstractions;
+using ApiManager.Infra.Dal.Abstraction;
 using Dapper;
 using DapperExtensions;
-using MySql.Data.MySqlClient;
+using DapperExtensions.PredicateExtensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ApiManager.Infra.Dal.Context
@@ -16,9 +14,9 @@ namespace ApiManager.Infra.Dal.Context
     public class DbContext : IDbContext
     {
 
-        private IConnectionFactory _factory;
+        private readonly IConnectionFactory _factory;
 
-        private List<Func<IDbConnection, IDbTransaction, Task>> _commands = new List<Func<IDbConnection, IDbTransaction, Task>>();
+        private readonly List<Func<IDbConnection, IDbTransaction, Task>> _commands = new List<Func<IDbConnection, IDbTransaction, Task>>();
 
         public DbContext(IConnectionFactory factory)
         {
@@ -36,7 +34,6 @@ namespace ApiManager.Infra.Dal.Context
                 return conn.QueryAsync<T>(sql, param, null, null, null);
             }
         }
-
         public Task<T> QueryFirstOrDefaultAsync<T>(string sql, object param)
         {
             using (var conn = _factory.Create())
@@ -48,7 +45,6 @@ namespace ApiManager.Infra.Dal.Context
                 return conn.QueryFirstOrDefaultAsync<T>(sql, param, null, null, null);
             }
         }
-
         public Task<T> QuerySingleOrDefaultAsync<T>(string sql, object param)
         {
             using (var conn = _factory.Create())
@@ -60,31 +56,7 @@ namespace ApiManager.Infra.Dal.Context
                 return conn.QuerySingleOrDefaultAsync<T>(sql, param, null, null, null);
             }
         }
-
-        public Task<IEnumerable<T>> GetListAsync<T>(object? predicate = null, IList<ISort>? sort = null)
-            where T : class
-        {
-            using var conn = _factory.Create();
-            if (conn.State != ConnectionState.Open)
-            {
-                conn.Open();
-            }
-            return conn.GetListAsync<T>(predicate, sort);
-        }
-
-        public Task<IEnumerable<T>> GetListAsync<T>(Expression<Func<T,bool>> expression , IList<ISort>? sort = null)
-            where T : class
-        {
-            using var conn = _factory.Create();
-            if (conn.State != ConnectionState.Open)
-            {
-                conn.Open();
-            }
-            var predicate = expression.ToDapperPredicate();
-            return conn.GetListAsync<T>(predicate, sort);
-        }
-
-        public Task<T> GetByIdAsync<T,TKey>(TKey id) where T : class
+        public async Task<(IEnumerable<T1>, IEnumerable<T2>)> QueryMultiAsync<T1, T2>(string sql, object param)
         {
             using (var conn = _factory.Create())
             {
@@ -92,7 +64,10 @@ namespace ApiManager.Infra.Dal.Context
                 {
                     conn.Open();
                 }
-                return  conn.GetAsync<T>(id);
+                using (var grid = await conn.QueryMultipleAsync(sql, param))
+                {
+                    return (await grid.ReadAsync<T1>(), await grid.ReadAsync<T2>());
+                }
             }
         }
 
@@ -100,7 +75,6 @@ namespace ApiManager.Infra.Dal.Context
         {
             _commands.Add(command);
         }
-
         public void AddCommands(IEnumerable<Func<IDbConnection, IDbTransaction, Task>> commands)
         {
             _commands.AddRange(commands);
@@ -133,6 +107,33 @@ namespace ApiManager.Infra.Dal.Context
             var res = _commands.Count;
             _commands.Clear();
             return res;
+        }
+
+
+        public Task<T> GetAsync<T>(object id)
+            where T : class
+        {
+            using (var conn = _factory.Create())
+            {
+                if (conn.State != ConnectionState.Open)
+                {
+                    conn.Open();
+                }
+                return conn.GetAsync<T>(id);
+            }
+        }
+
+        public Task<IEnumerable<T>> GetListAsync<T>(object?predicate = null, IList<ISort>? sort = null)
+            where T : class
+        {
+            using (var conn = _factory.Create())
+            {
+                if (conn.State != ConnectionState.Open)
+                {
+                    conn.Open();
+                }
+                return conn.GetListAsync<T>(predicate, sort);
+            }
         }
     }
 }

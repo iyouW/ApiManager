@@ -7,7 +7,9 @@
         </div>
         <Table max-height="600" :columns="columns" :data="projectList.list" @on-selection-change="onSelectionChanged">
             <template slot='action' slot-scope="{row}">
-                <Button type="primary" size="small" :to="`/${row.id}/module`" class="m-r-5">管理模块</Button>
+                <Button class="m-r-5" type="primary" size="small" :to="`/addProject?projectId=${row.id}`">编辑</Button>
+                <Button class="m-r-5" type="error" size="small" @click.stop="()=>onDelete(row)"  >删除</Button>
+                <Button class="m-r-5" type="primary" size="small" :to="`/${row.id}/module`">管理模块</Button>
                 <Button type="primary" size="small" :to="`/${row.id}/proxy`">管理代理</Button>
             </template>
         </Table>
@@ -42,7 +44,7 @@ export default {
                     title:'操作',
                     slot:'action',
                     fixed:'right',
-                    width:180,
+                    width:260,
                     align:'center'
                 }
             ]
@@ -64,6 +66,9 @@ export default {
         },
         async onGenerateExample(){
             await this.projectList.generateExampleAsync()
+        },
+        async onDelete(row){
+            await this.projectList.deleteAsync(row)
         }
     }
 }

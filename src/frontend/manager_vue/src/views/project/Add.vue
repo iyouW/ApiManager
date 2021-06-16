@@ -22,7 +22,17 @@
 import { mapGetters } from 'vuex' 
 export default {
     computed:{
-        ...mapGetters('project',['projectBuilder'])
+        ...mapGetters('project',['projectBuilder']),
+        projectId(){
+            return this.$route.query.projectId
+        }
+    },
+    async created(){
+        if(this.projectId){
+            this.projectBuilder.clear()
+            this.projectBuilder.id = this.projectId
+            await this.projectBuilder.getAsync()
+        }
     },
     methods:{
         async onSave(){

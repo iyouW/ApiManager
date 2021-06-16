@@ -1,17 +1,13 @@
 ﻿using ApiManager.Infra.Dal.Abstraction;
 using ApiManager.Infra.Dal.Context;
 using ApiManager.Infra.Dal.Factory;
+using Dapper;
+using DapperExtensions.Mapper;
+using DapperExtensions.Sql;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Dapper;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DapperExtensions.Sql;
-using DapperExtensions.Mapper;
 using System.Reflection;
 
 namespace ApiManager.Infra.Dal

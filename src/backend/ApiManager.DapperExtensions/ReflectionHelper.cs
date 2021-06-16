@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -64,11 +65,37 @@ namespace DapperExtensions
                 return result;
             }
 
-
             foreach (var propertyInfo in obj.GetType().GetProperties())
             {
                 string name = propertyInfo.Name;
                 object value() => propertyInfo.GetValue(obj, null);
+                result[name] = value;
+            }
+
+            return result;
+        }
+
+        public static IDictionary<string, object> GetObjectValuesPlain(object obj)
+        {
+            IDictionary<string, object> result = new Dictionary<string, object>();
+            if (obj == null)
+            {
+                return result;
+            }
+
+            if (obj is IDictionary dict)
+            {
+                foreach (DictionaryEntry kv in dict)
+                {
+                    result.Add(kv.Key.ToString(), kv.Value);
+                }
+                return result;
+            }
+
+            foreach (var propertyInfo in obj.GetType().GetProperties())
+            {
+                string name = propertyInfo.Name;
+                object value = propertyInfo.GetValue(obj, null);
                 result[name] = value;
             }
 

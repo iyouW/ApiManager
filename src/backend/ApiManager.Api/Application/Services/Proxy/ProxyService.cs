@@ -1,4 +1,5 @@
-﻿using ApiManager.Core.Repositories;
+﻿using ApiManager.Api.Application.Model.Request.Proxy;
+using ApiManager.Core.Repositories;
 using ApiManager.Infra.Dal.Abstraction;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace ApiManager.Api.Application.Services.Project
 
         public Task<Core.Entities.Proxy> GetByIdAsync(string id)
         {
-            return _repo.GetByIdAsync(id);
+            return _repo.GetAsync(id);
         }
 
         public Task<IEnumerable<Core.Entities.Proxy>> GetListAsync()
@@ -33,11 +34,23 @@ namespace ApiManager.Api.Application.Services.Project
             return _repo.GetListAsync(x => x.ProjectId == projectId);
         }
 
-        public async Task<Core.Entities.Proxy> AddAsync(Core.Entities.Proxy project)
+        public async Task<Core.Entities.Proxy> AddAsync(Core.Entities.Proxy proxy)
         {
-            _repo.Add(project);
+            _repo.Add(proxy);
             _ = await _context.SaveChangeAsync();
-            return project;
+            return proxy;
+        }
+
+        public async Task UpdateAsync(UpdateProxyRequest request)
+        {
+            _repo.UpdatePartial(x =>x.Id == request.Id , request);
+            _ = await _context.SaveChangeAsync();
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            _repo.Delete(id);
+            _ = await _context.SaveChangeAsync();
         }
     }
 }
