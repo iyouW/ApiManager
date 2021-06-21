@@ -63,6 +63,24 @@ namespace ApiManager.Api.Application.Services.CodeGenerator
             return res;
         }
 
+        public async Task<Stream> GenerateDocumentAsync(string projectId)
+        {
+            var project = await _projService.GetDetailAsync(projectId);
+            var type = "document";
+            var projectDir = CreateProjectDirectory(project.Name, type);
+            foreach (var module in project.Modules)
+            {
+                if (!module.Apis.Any())
+                {
+                    continue;
+                }
+                await CreateModuleDocumentAsync(project, module, projectDir);
+            }
+            var res = CreateProjectZip(project.Name, projectDir, type);
+            Directory.Delete(projectDir, true);
+            return res;
+        }
+
         private string CreateProjectDirectory(string projectName, string type = "bridge")
         {
             var path = Path.Combine(TemporaryDirectory, $"{projectName}_type");
@@ -123,6 +141,22 @@ namespace ApiManager.Api.Application.Services.CodeGenerator
                     api
                 };
                 var content = await _engine.GenerateAsync("template/demo.liquid", model);
+                var file = Path.Combine(moduleDir.FullName, $"{api.Name}.vue");
+                await File.WriteAllTextAsync(file, content);
+            }
+        }
+
+        private async Task CreateModuleDocumentAsync(ProjectDetailResponse project, ModuleDetailResponse module, string projectDir)
+        {
+            var moduleDir = Directory.CreateDirectory(Path.Combine(projectDir, module.Name));
+            foreach (var api in module.Apis)
+            {
+                api.Proxy = project.Proxies.SingleOrDefault(x => x.Id == api.ProxyId);
+                var model = new
+                {
+                    api
+                };
+                var content = await _engine.GenerateAsync("template/doc.liquid", model);
                 var file = Path.Combine(moduleDir.FullName, $"{api.Name}.vue");
                 await File.WriteAllTextAsync(file, content);
             }

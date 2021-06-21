@@ -48,5 +48,19 @@ namespace ApiManager.Api.Controllers
             Response.Headers.Add("X-File-Name", fileName);
             return File(stream, "application/octet-stream", HttpUtility.UrlEncode(fileName));
         }
+
+        [HttpPost("doc")]
+        public async Task<IActionResult> GenerateDocument(GenerateBridgeRequest request)
+        {
+            var stream = await _service.GenerateDocumentAsync(request.ProjectId);
+            var fileName = "temp.zip";
+            if (stream is FileStream s)
+            {
+                fileName = Path.GetFileName(s.Name);
+            }
+            Response.Headers.Add("Access-Control-Expose-Headers", "X-File-Name");
+            Response.Headers.Add("X-File-Name", fileName);
+            return File(stream, "application/octet-stream", HttpUtility.UrlEncode(fileName));
+        }
     }
 }

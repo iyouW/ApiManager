@@ -7,5 +7,6 @@ namespace ApiManager.Api.Application.Services.CodeGenerator
     {
         Task<Stream> GenerateBridgeAsync(string projectId);
         Task<Stream> GenerateExampleAsync(string projectId);
+        Task<Stream> GenerateDocumentAsync(string projectId);
     }
 }
