@@ -1,0 +1,94 @@
+---
+title: '{{ api.Name }} {{api.Description}}}'
+---
+
+### log <Badge text="^6.8" type="tip"/>
+
+<span class="font_style">{{api.Description}}</span>
+
+#### 请求参数
+
+{% if api.InputRoot  -%}
+| Prop | Type | Default | Comment |
+| ---- |:----:|:----: |:------: |
+{% for param in api.InputRoot.Children -%}
+| **`{{param.Name}}}`** | `{{param.TypeDesc}}` | `N/A`  | <span class="font_style">{{param.Comment}}</span> |
+{% endfor %}
+{% elsif -%}
+<span class="font_style">N/A</span>
+{% endif -%}
+{% if api.InputRoot %}
+#### 参数代码示例
+
+```js
+let params = {
+  level: 'Info',
+  message: 'info from weex by bridgeService'
+}
+```
+{% endif %}
+#### 接口调用示例
+
+```js
+{% if api.InputRoot -%}
+let params = {
+  level: 'Info',
+  message: 'info from weex by bridgeService'
+}
+{% endif -%}
+this.$bridge
+  .{{api.Name}}({% if api.InputRoot %}params{% endif %})
+  .then(res => {
+    this.$alert(res)
+  })
+  .catch(err => {
+    this.$toast(err)
+  })
+```
+
+#### 返回参数
+
++ <span class="font_style">成功时返回</span>
+
+{% if api.OutputRoot -%}
+| Prop | Type | Default | Description |
+| :---- |:----|:---|:-------| :----------|
+{% for param in api.OutputRoot.Children -%}
+| **`{{param.Name}}`** | `{{para.TypeDesc}}` | `N/A` | <span class="font_style">{{param.Comment}}</span> |
+{% endfor -%}
+{% endif %}
++ <span class="font_style">失败时返回</span>
+
+{% if api.ExceptionRoot -%}
+| Prop | Type | Default | Description |
+| :---- |:----|:---|:-------| :----------|
+{% for param in api.ExceptionRoot.Children -%}
+| **`{{param.Name}}`** | `{{para.TypeDesc}}` | `N/A` | <span class="font_style">{{param.Comment}}</span> |
+{% endfor -%}
+{% endif %}
+
+
+#### FAQ
+
+::: tip tip
+
+:::
+
+<style>
+    .font_style {
+        font-family: FZLTHJW--GB1-0;
+        font-size: 14px;
+        color: #333333;
+        line-height: 38px;
+    }
+    .color_blue {
+        font-family: FZLTHJW--GB1-0;
+        font-size: 14px;
+        line-height: 38px;
+        color: #267aff;
+        font-weight: 600;
+    }
+    .color_g {
+        background-color: #42b983;
+    }
+</style>
