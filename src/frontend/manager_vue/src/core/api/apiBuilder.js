@@ -36,7 +36,7 @@ export class ApiBuilder {
         const supportedApp = this.supportedApp
         if(this.id){
             const id = this.id
-            await this._gateway.UpdateAsync({id,name, description, isSupported, isParameterStandard,mapName,proxyId,author, supportedApp})
+            await this._gateway.updateAsync({id,name, description, isSupported, isParameterStandard,mapName,proxyId,author, supportedApp})
         }else{
             await this._gateway.addAsync({name, description, isSupported, isParameterStandard,mapName,proxyId,projectId,moduleId, author, supportedApp})
         }
