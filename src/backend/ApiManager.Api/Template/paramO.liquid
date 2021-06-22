@@ -1,7 +1,7 @@
 {% for child in children -%}
-{% if child.Name != 'items' -%}{{ child.Name}}:{% endif %}
+{% if child.Name != 'Items' %}{{ child.Name}}:{% endif %}
     {%- case child.TypeDesc -%}
-        {%- when 'string' -%}
+        {%- when 'String' -%}
             '',
         {%- when 'Number' -%}
             -1,
@@ -12,10 +12,10 @@
                 {% assign children = child.Children -%}
                 {% include './Template/paramO.liquid'-%}
             },
-        {- else -}
+        {%- else -%}
             [
                 {% assign children = child.Children -%}
                 {% include './Template/paramO.liquid'-%}
             ],
-    {- endcase -}
-{% endif -%}
+    {%- endcase -%}
+{%- endfor %}

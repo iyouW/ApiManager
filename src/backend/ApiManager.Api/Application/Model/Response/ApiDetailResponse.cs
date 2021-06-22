@@ -19,18 +19,26 @@ namespace ApiManager.Api.Application.Model.Response
         public ParameterDetailResponse? OutputRoot => Compose(Output);
         public ParameterDetailResponse? ExceptionRoot => Compose(Exception);
 
+        public IEnumerable<ParameterDetailResponse>? InputObjects => Find(InputRoot);
+        public IEnumerable<ParameterDetailResponse>? OutputObjects => Find(OutputRoot);
+        public IEnumerable<ParameterDetailResponse>? ExceptionObjects => Find(ExceptionRoot);
+
         private static ParameterDetailResponse? Compose(IEnumerable<ParameterDetailResponse> nodes)
         {
             if (!nodes.Any())
             {
                 return null;
             }
-            return TreeD.Compose(
-                nodes,
-                x => string.IsNullOrWhiteSpace(x.ParentId),
-                (n1, n2) => n1.Id == n2.ParentId,
-                (parent, children) => parent.Children = parent.Children.Union(children)
-            ).FirstOrDefault();
+            return Tree<ParameterDetailResponse,string>.Compose(nodes).FirstOrDefault();
+        }
+
+        private static IEnumerable<ParameterDetailResponse>? Find(ParameterDetailResponse? node)
+        {
+            if (node is null)
+            {
+                return null;
+            }
+            return Tree<ParameterDetailResponse, string>.Find(node, x => x.Type == Core.Entities.ParameterType.Object);
         }
     }
 }

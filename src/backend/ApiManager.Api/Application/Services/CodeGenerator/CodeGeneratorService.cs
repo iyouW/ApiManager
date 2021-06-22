@@ -130,7 +130,15 @@ namespace ApiManager.Api.Application.Services.CodeGenerator
                 {
                     api
                 };
-                var content = await _engine.GenerateAsync("template/demo.liquid", model);
+                var content = string.Empty;
+                try
+                {
+                    content = await _engine.GenerateAsync("template/demo.liquid", model);
+                }
+                catch (System.Exception ex)
+                {
+                    throw ex;
+                }
                 var file = Path.Combine(moduleDir.FullName, $"{api.Name}.vue");
                 await File.WriteAllTextAsync(file, content);
             }

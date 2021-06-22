@@ -33,7 +33,7 @@ namespace ApiManager.Infra.Repositories
                 new Sort
                 {
                     PropertyName = nameof(IEntityBase<TKey>.CreatedDate),
-                    Ascending = true
+                    Ascending = false
                 }
             };
             return _context.GetListAsync<T>(predicate, sort);

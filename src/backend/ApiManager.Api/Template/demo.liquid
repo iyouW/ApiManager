@@ -22,7 +22,7 @@ export default {
       detail: '{{ api.Description }}',
       {% if api.InputRoot -%}
       params:{
-        {% assign children = api.InputRoot -%}
+        {% assign children = api.InputRoot.Children -%}
         {% include './Template/paramo.liquid' -%}
       }
       {%- endif %}
