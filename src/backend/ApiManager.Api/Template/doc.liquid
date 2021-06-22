@@ -1,5 +1,5 @@
 ---
-title: '{{ api.Name }} {{api.Description}}}'
+title: '{{ api.Name }}'
 ---
 
 ### log <Badge text="^6.8" type="tip"/>
@@ -12,9 +12,9 @@ title: '{{ api.Name }} {{api.Description}}}'
 | Prop | Type | Default | Comment |
 | ---- |:----:|:----: |:------: |
 {% for param in api.InputRoot.Children -%}
-| **`{{param.Name}}}`** | `{{param.TypeDesc}}` | `N/A`  | <span class="font_style">{{param.Comment}}</span> |
+| **`{{param.Name}}`** | `{{param.TypeDesc}}` | `N/A`  | <span class="font_style">{{param.Comment}}</span> |
 {% endfor %}
-{% elsif -%}
+{% else -%}
 <span class="font_style">N/A</span>
 {% endif -%}
 {% if api.InputRoot %}
@@ -54,7 +54,7 @@ this.$bridge
 | Prop | Type | Default | Description |
 | :---- |:----|:---|:-------| :----------|
 {% for param in api.OutputRoot.Children -%}
-| **`{{param.Name}}`** | `{{para.TypeDesc}}` | `N/A` | <span class="font_style">{{param.Comment}}</span> |
+| **`{{param.Name}}`** | `{{param.TypeDesc}}` | `N/A` | <span class="font_style">{{param.Comment}}</span> |
 {% endfor -%}
 {% endif %}
 + <span class="font_style">失败时返回</span>
@@ -63,7 +63,7 @@ this.$bridge
 | Prop | Type | Default | Description |
 | :---- |:----|:---|:-------| :----------|
 {% for param in api.ExceptionRoot.Children -%}
-| **`{{param.Name}}`** | `{{para.TypeDesc}}` | `N/A` | <span class="font_style">{{param.Comment}}</span> |
+| **`{{param.Name}}`** | `{{param.TypeDesc}}` | `N/A` | <span class="font_style">{{param.Comment}}</span> |
 {% endfor -%}
 {% endif %}
 

@@ -53,4 +53,17 @@ export class ProjectGateway{
         link.click()
         window.URL.revokeObjectURL(downloadUrl)
     }
+
+    async generateDocumentAsync({projectId}){
+        const url ='codeGenerator/doc'
+        const res = await this._http.post(url,{projectId},{responseType:'arraybuffer'})
+        const link = document.createElement('a')
+        const file = new Blob([res.data])
+        const downloadUrl = window.URL.createObjectURL(file)
+        const fileName =  res.headers['x-file-name'] || '下载.zip'
+        link.href = downloadUrl
+        link.download = fileName
+        link.click()
+        window.URL.revokeObjectURL(downloadUrl)
+    }
 } 

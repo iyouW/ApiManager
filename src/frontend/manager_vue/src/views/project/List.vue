@@ -1,9 +1,10 @@
 <template>
     <Card>
         <div slot="title">
-            <Button type="success" icon="md-add" class="m-r-5" to="/addProject">新增项目</Button>
-            <Button type="primary" icon="ios-water" class="m-r-5" @click.stop="onGenerateCode">生成Bridge代码</Button>
-            <Button type="primary" icon="md-sunny" @click.stop="onGenerateExample">生成示例代码</Button>
+            <Button class="m-r-5" type="success" icon="md-add" to="/addProject">新增项目</Button>
+            <Button class="m-r-5" type="primary" icon="ios-water"  @click.stop="onGenerateCode">生成Bridge代码</Button>
+            <Button class="m-r-5" type="primary" icon="md-sunny" @click.stop="onGenerateExample">生成示例代码</Button>
+            <Button type="primary" icon="md-flower" @click.stop="onGenerateDocument">生成Markdown文档</Button>
         </div>
         <Table max-height="600" :columns="columns" :data="projectList.list" @on-selection-change="onSelectionChanged">
             <template slot='action' slot-scope="{row}">
@@ -66,6 +67,9 @@ export default {
         },
         async onGenerateExample(){
             await this.projectList.generateExampleAsync()
+        },
+        async onGenerateDocument(){
+            await this.projectList.generateDocumentAsync()
         },
         async onDelete(row){
             await this.projectList.deleteAsync(row)

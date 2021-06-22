@@ -19,11 +19,15 @@ export class ProjectList {
     }
 
     async generateCodeAsync(){
-        await this._gateway.generateCodeAsync({projectId: this.selectedProject.id});
+        await this._gateway.generateCodeAsync({projectId: this.selectedProject.id})
     }
 
     async generateExampleAsync(){
-        await this._gateway.generateExampleAsync({projectId: this.selectedProject.id});
+        await this._gateway.generateExampleAsync({projectId: this.selectedProject.id})
+    }
+
+    async generateDocumentAsync(){
+        await this._gateway.generateDocumentAsync({projectId: this.selectedProject.id})
     }
 
     async deleteAsync(row){
