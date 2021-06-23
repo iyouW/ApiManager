@@ -38,7 +38,7 @@ namespace ApiManager.Api.Application.Model.Response
             {
                 return null;
             }
-            return Tree<ParameterDetailResponse, string>.Find(node, x => x.Type == Core.Entities.ParameterType.Object);
+            return Tree<ParameterDetailResponse, string>.Find(node, x => x.Type == Core.Entities.ParameterType.Object && x.Name != "root");
         }
     }
 }

@@ -2,7 +2,7 @@
 title: '{{ api.Name }}'
 ---
 
-### log <Badge text="^6.8" type="tip"/>
+### {{api.Name}} <Badge text="^6.8" type="tip"/>
 
 <span class="font_style">{{api.Description}}</span>
 
@@ -13,7 +13,16 @@ title: '{{ api.Name }}'
 | ---- |:----:|:----: |:------: |
 {% for param in api.InputRoot.Children -%}
 | **`{{param.Name}}`** | `{{param.TypeDesc}}` | `N/A`  | <span class="font_style">{{param.Comment}}</span> |
-{% endfor %}
+{% endfor -%}
+{% for io in api.InputObjects %}
++ <span class="font_style">{{io.Name}} 对象属性</span>
+
+| Prop | Type | Default | Comment |
+| ---- |:----:|:----: |:------: |
+{% for sio in io.Children -%}
+| **`{{sio.Name}}`** | `{{sio.TypeDesc}}` | `N/A`  | <span class="font_style">{{sio.Comment}}</span> |
+{% endfor -%}
+{% endfor -%}
 {% else -%}
 <span class="font_style">N/A</span>
 {% endif -%}
@@ -56,6 +65,15 @@ this.$bridge
 {% for param in api.OutputRoot.Children -%}
 | **`{{param.Name}}`** | `{{param.TypeDesc}}` | `N/A` | <span class="font_style">{{param.Comment}}</span> |
 {% endfor -%}
+{% for ob in api.OutputObjects %}
++ <span class="font_style">{{ob.Name}} 对象属性</span>
+
+| Prop | Type | Default | Description |
+| :---- |:----|:---|:-------| :----------|
+{% for sob in ob.Children -%}
+| **`{{sob.Name}}`** | `{{sob.TypeDesc}}` | `N/A` | <span class="font_style">{{sob.Comment}}</span> |
+{% endfor -%}
+{% endfor -%}
 {% endif %}
 + <span class="font_style">失败时返回</span>
 
@@ -64,6 +82,15 @@ this.$bridge
 | :---- |:----|:---|:-------| :----------|
 {% for param in api.ExceptionRoot.Children -%}
 | **`{{param.Name}}`** | `{{param.TypeDesc}}` | `N/A` | <span class="font_style">{{param.Comment}}</span> |
+{% endfor -%}
+{% for eo in api.ExceptionObjects %}
++ <span class="font_style">{{eo.Name}} 对象属性</span>
+
+| Prop | Type | Default | Description |
+| :---- |:----|:---|:-------| :----------|
+{% for seo in eo.Children -%}
+| **`{{seo.Name}}`** | `{{seo.TypeDesc}}` | `N/A` | <span class="font_style">{{seo.Comment}}</span> |
+{% endfor -%}
 {% endfor -%}
 {% endif %}
 
